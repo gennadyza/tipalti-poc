@@ -65,7 +65,10 @@
                     </schemaIncludes>-->
                     <schemas>
                         <schema>
-                            <url>https://api.sandbox.tipalti.com/payerfunctions.asmx?wsdl</url>
+                            <url>https://api.sandbox.tipalti.com/v9/payerfunctions.asmx?wsdl</url>
+                        </schema>
+                        <schema>
+                            <url>https://api.sandbox.tipalti.com/v9/PayeeFunctions.asmx?wsdl</url>
                         </schema>
                     </schemas>
                 </configuration>
