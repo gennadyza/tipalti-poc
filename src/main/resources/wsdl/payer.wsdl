@@ -1,0 +1,2089 @@
+<wsdl:definitions xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/"
+                  xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+                  xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://Tipalti.org/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema"
+                  xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+                  xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  targetNamespace="http://Tipalti.org/">
+    <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Payer functions.</wsdl:documentation>
+    <wsdl:types>
+        <s:schema elementFormDefault="qualified" targetNamespace="http://Tipalti.org/">
+            <s:element name="CreatePaymentOrdersReport">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="payerName" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="timestamp" type="s:double"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="startTime" type="s:dateTime"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="endTime" type="s:dateTime"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="CreatePaymentOrdersReportResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="CreatePaymentOrdersReportResult"
+                                   type="tns:TipaltiReportResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="TipaltiReportResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="errorMessage" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="errorCode" type="s:int"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="resultsFile" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="TestPaymentFile">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="payerName" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="timestamp" type="s:double"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="fileName" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="totalAmount" type="s:double"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="TestPaymentFileResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="TestPaymentFileResult"
+                                   type="tns:TipaltiProcessPaymentResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="TipaltiProcessPaymentResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="errorMessage" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="errorCode" type="tns:WSErrors"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="LineErrorsOrWarning"
+                               type="tns:ArrayOfLineErrorOrWarning"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="resultsFile" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:simpleType name="WSErrors">
+                <s:restriction base="s:string">
+                    <s:enumeration value="UnknownError"/>
+                    <s:enumeration value="OK"/>
+                    <s:enumeration value="UnknownCountryCode"/>
+                    <s:enumeration value="CountryNotSupported"/>
+                    <s:enumeration value="UnknownState"/>
+                    <s:enumeration value="PayerUnknown"/>
+                    <s:enumeration value="PayeeUnknown"/>
+                    <s:enumeration value="EncryptionKeyFailedValidation"/>
+                    <s:enumeration value="ParameterError"/>
+                    <s:enumeration value="FeeScheduleUnknown"/>
+                    <s:enumeration value="StringContainsNonEBCDICCharacters"/>
+                    <s:enumeration value="PreferredEntityIsNotValid"/>
+                    <s:enumeration value="InvoiceRefCodeUnknown"/>
+                    <s:enumeration value="InvoiceCannotBeCancelled"/>
+                    <s:enumeration value="UnknownCurrencyCode"/>
+                    <s:enumeration value="InvalidJson"/>
+                    <s:enumeration value="InvoiceValidationError"/>
+                    <s:enumeration value="ValidationError"/>
+                    <s:enumeration value="ValidationWarning"/>
+                    <s:enumeration value="BillsModuleMustBeEnabled"/>
+                    <s:enumeration value="FileNotFound"/>
+                    <s:enumeration value="InvoiceFileNotFound"/>
+                    <s:enumeration value="CannotReadFile"/>
+                    <s:enumeration value="CannotDeleteFile"/>
+                    <s:enumeration value="CannotWriteFile"/>
+                    <s:enumeration value="PaymentAmountTotalMismatch"/>
+                    <s:enumeration value="InvalidPayerIpAddress"/>
+                    <s:enumeration value="EnahncedSecurityNotConfigured"/>
+                    <s:enumeration value="SubPayerIsNotFound"/>
+                    <s:enumeration value="SubPayerDoensNotSupportDynamicKey"/>
+                    <s:enumeration value="PayerDoesntSupportInvoiceModule"/>
+                    <s:enumeration value="CustomFieldDoesNotExist"/>
+                    <s:enumeration value="DuplicateInvoiceRefCode"/>
+                    <s:enumeration value="PaidOrInProcessInvoiceCannotBeUpdated"/>
+                    <s:enumeration value="CanApproveNotSupported"/>
+                    <s:enumeration value="AuthorizationError"/>
+                    <s:enumeration value="InvoiceNotApprovedbyPayee"/>
+                    <s:enumeration value="PaymentAmountCannotBeNegative"/>
+                    <s:enumeration value="RequestLimitReached"/>
+                    <s:enumeration value="ItemAlreadyInProcess"/>
+                    <s:enumeration value="RequestDoesNotExist"/>
+                    <s:enumeration value="RequestStillInProgress"/>
+                    <s:enumeration value="CustomFieldValueIsNotUnique"/>
+                    <s:enumeration value="BillStatusIsNotSupported"/>
+                    <s:enumeration value="GLAccountAssignedToActiveBill"/>
+                    <s:enumeration value="CustomFieldValidationError"/>
+                    <s:enumeration value="GlAccountValidationError"/>
+                    <s:enumeration value="APAccountNotFound"/>
+                    <s:enumeration value="SyncDirectionInvalid"/>
+                    <s:enumeration value="ErrorTypeInvalid"/>
+                    <s:enumeration value="IntegrationNameInvalid"/>
+                    <s:enumeration value="IntegrationVersionOverMaxLength"/>
+                    <s:enumeration value="CreationTimestampInvalid"/>
+                    <s:enumeration value="ErrorDetailsInvalid"/>
+                    <s:enumeration value="PaymentTermNotFound"/>
+                    <s:enumeration value="CustomFieldInvalidDateFormat"/>
+                    <s:enumeration value="PaymentTermValidationError"/>
+                    <s:enumeration value="TaxCodeValidationError"/>
+                    <s:enumeration value="TaxCodeExternalIdNotFoundError"/>
+                    <s:enumeration value="IllegalErpCurrencyUpdate"/>
+                    <s:enumeration value="PurchaseOrderNotFound"/>
+                    <s:enumeration value="GoodsReceivedNotificationNotFound"/>
+                </s:restriction>
+            </s:simpleType>
+            <s:complexType name="ArrayOfLineErrorOrWarning">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="LineErrorOrWarning"
+                               type="tns:LineErrorOrWarning"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="LineErrorOrWarning">
+                <s:sequence>
+                    <s:element minOccurs="1" maxOccurs="1" name="lineNumber" type="s:int"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="isWarning" type="s:boolean"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="message" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="TestMultiCurrencyPaymentFile">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="payerName" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="timestamp" type="s:double"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="fileName" type="s:string"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="TestMultiCurrencyPaymentFileResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="TestMultiCurrencyPaymentFileResult"
+                                   type="tns:TipaltiProcessPaymentResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="ProcessPaymentFile">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="payerName" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="timestamp" type="s:double"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="fileName" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="totalAmount" type="s:double"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="ProcessPaymentFileResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="ProcessPaymentFileResult"
+                                   type="tns:TipaltiProcessPaymentResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="GetCustomFields">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="payerName" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="timestamp" type="s:double"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="GetCustomFieldsResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="GetCustomFieldsResult"
+                                   type="tns:TipaltiGetCustomFieldsResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="TipaltiGetCustomFieldsResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="errorMessage" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="errorCode" type="tns:WSErrors"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="CustomFields" type="tns:ArrayOfCustomFieldInfo"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ArrayOfCustomFieldInfo">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="CustomFieldInfo" nillable="true"
+                               type="tns:CustomFieldInfo"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="CustomFieldInfo">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="Entity" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Title" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ValueType" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="SubEntity" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Values" type="tns:ArrayOfCustomFieldValue"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Category" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ArrayOfCustomFieldValue">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="CustomFieldValue" nillable="true"
+                               type="tns:CustomFieldValue"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="CustomFieldValue">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="Value" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Code" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="PayerEntityName" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="IsActive" type="s:boolean"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="GetProviderAccounts">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="payerName" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="timestamp" type="s:double"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="GetProviderAccountsResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="GetProviderAccountsResult"
+                                   type="tns:TipaltiGetProviderAccountsResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="TipaltiGetProviderAccountsResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="errorMessage" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="errorCode" type="tns:WSErrors"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="AccountsInfo" type="tns:ArrayOfAccountInfo"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ArrayOfAccountInfo">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="AccountInfo" nillable="true"
+                               type="tns:AccountInfo"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="AccountInfo">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="Provider" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="AccountIdentifier" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Currency" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="DisplayName" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="PayerEntityName" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="ProcessMultiCurrencyPaymentFile">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="payerName" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="timestamp" type="s:double"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="fileName" type="s:string"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="ProcessMultiCurrencyPaymentFileResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="ProcessMultiCurrencyPaymentFileResult"
+                                   type="tns:TipaltiProcessPaymentResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="GetDynamicKeyOfSubPayer">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="payerName" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="subPayerName" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="timestamp" type="s:double"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="GetDynamicKeyOfSubPayerResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="GetDynamicKeyOfSubPayerResult"
+                                   type="tns:TipaltiSubPayerSecurityToken"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="TipaltiSubPayerSecurityToken">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="errorMessage" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="errorCode" type="s:int"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Key" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Token" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="ProcessPayments">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="payerName" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="paymentGroupTitle" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="tipaltiPaymentsOrders"
+                                   type="tns:ArrayOfTipaltiPaymentOrderItem"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="timeStamp" type="s:double"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="ArrayOfTipaltiPaymentOrderItem">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="TipaltiPaymentOrderItem" nillable="true"
+                               type="tns:TipaltiPaymentOrderItem"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="TipaltiPaymentOrderItem">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="Idap" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="Amount" type="s:double"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="RefCode" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="EWalletMessage" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="IgnoreThresholds" type="s:boolean"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="BankingMessage" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="EmailMessage" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Currency" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="ScheduledDate" nillable="true" type="s:dateTime"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="IsScheduledVisible" nillable="true" type="s:boolean"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="IgnoreRiskCases" nillable="true" type="s:boolean"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="CustomFields" type="tns:ArrayOfKeyValuePair"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="IgnoreTaxValidation" nillable="true" type="s:boolean"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="MaxWithholding" nillable="true" type="s:boolean"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="IncomeType" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="TreatyLimitExceeded" nillable="true" type="s:boolean"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ArrayOfKeyValuePair">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="KeyValuePair" nillable="true"
+                               type="tns:KeyValuePair"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="KeyValuePair">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="Key" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Value" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="ProcessPaymentsResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="ProcessPaymentsResult"
+                                   type="tns:TipaltiExpandedProcessPaymentResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="TipaltiExpandedProcessPaymentResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="errorMessage" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="errorCode" type="s:int"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="linesResults" type="tns:ArrayOfExpandedLineResult"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="summary"
+                               type="tns:ArrayOfTipaltiProcessPaymentsSummary"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ArrayOfExpandedLineResult">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="ExpandedLineResult"
+                               type="tns:ExpandedLineResult"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ExpandedLineResult">
+                <s:sequence>
+                    <s:element minOccurs="1" maxOccurs="1" name="status" type="tns:TipaltiLineResultStatus"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="paymentOrderStatus" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="message" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="refCode" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="lineErrorOrWarningType" type="s:int"/>
+                </s:sequence>
+            </s:complexType>
+            <s:simpleType name="TipaltiLineResultStatus">
+                <s:restriction base="s:string">
+                    <s:enumeration value="OK"/>
+                    <s:enumeration value="Warning"/>
+                    <s:enumeration value="Error"/>
+                </s:restriction>
+            </s:simpleType>
+            <s:complexType name="ArrayOfTipaltiProcessPaymentsSummary">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="TipaltiProcessPaymentsSummary" nillable="true"
+                               type="tns:TipaltiProcessPaymentsSummary"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="TipaltiProcessPaymentsSummary">
+                <s:sequence>
+                    <s:element minOccurs="1" maxOccurs="1" name="accountType" type="s:int"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="accountCurrency" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="fundsRequired" type="s:double"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="outstandingAmount" type="s:double"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="tipaltiSummaryAmounts"
+                               type="tns:ArrayOfTipaltiSummaryAmounts"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ArrayOfTipaltiSummaryAmounts">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="TipaltiSummaryAmounts" nillable="true"
+                               type="tns:TipaltiSummaryAmounts"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="TipaltiSummaryAmounts">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="summaryRowCurrency" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="totalAmount" type="s:double"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="immediateAmount" type="s:double"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="payableAmount" type="s:double"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="payerFees" type="s:double"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="scheduledAmount" type="s:double"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="outstandingAmount" type="s:double"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="withholdingAmount" type="s:double"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="estimatedProviderFees" type="s:double"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="TestPayments">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="payerName" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="paymentGroupTitle" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="tipaltiPaymentsOrders"
+                                   type="tns:ArrayOfTipaltiPaymentOrderItem"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="timeStamp" type="s:double"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="TestPaymentsResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="TestPaymentsResult"
+                                   type="tns:TipaltiExpandedProcessPaymentResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="ProcessPaymentsAsync">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="payerName" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="paymentGroupTitle" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="tipaltiPaymentsOrders"
+                                   type="tns:ArrayOfTipaltiPaymentOrderItem"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="timeStamp" type="s:double"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="ProcessPaymentsAsyncResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="ProcessPaymentsAsyncResult"
+                                   type="tns:TipaltiProcessPaymentAsyncResult"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="TipaltiProcessPaymentAsyncResult">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="errorMessage" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="errorCode" type="tns:WSErrors"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="requestId" type="s:long"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="TestPaymentsAsync">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="payerName" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="paymentGroupTitle" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="tipaltiPaymentsOrders"
+                                   type="tns:ArrayOfTipaltiPaymentOrderItem"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="timeStamp" type="s:double"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="TestPaymentsAsyncResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="TestPaymentsAsyncResult"
+                                   type="tns:TipaltiProcessPaymentAsyncResult"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="ProcessPaymentFileAsync">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="payerName" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="timeStamp" type="s:double"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="fileName" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="totalAmount" type="s:double"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="ProcessPaymentFileAsyncResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="ProcessPaymentFileAsyncResult"
+                                   type="tns:TipaltiProcessPaymentAsyncResult"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="TestPaymentFileAsync">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="payerName" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="timestamp" type="s:double"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="fileName" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="totalAmount" type="s:double"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="TestPaymentFileAsyncResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="TestPaymentFileAsyncResult"
+                                   type="tns:TipaltiProcessPaymentAsyncResult"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="TestMultiCurrencyPaymentFileAsync">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="payerName" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="timestamp" type="s:double"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="fileName" type="s:string"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="TestMultiCurrencyPaymentFileAsyncResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="TestMultiCurrencyPaymentFileAsyncResult"
+                                   type="tns:TipaltiProcessPaymentAsyncResult"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="ProcessMultiCurrencyPaymentFileAsync">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="payerName" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="timestamp" type="s:double"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="fileName" type="s:string"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="ProcessMultiCurrencyPaymentFileAsyncResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="ProcessMultiCurrencyPaymentFileAsyncResult"
+                                   type="tns:TipaltiProcessPaymentAsyncResult"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="GetProcessingRequestStatus">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="payerName" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="requestId" type="s:long"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="timeStamp" type="s:double"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="GetProcessingRequestStatusResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="GetProcessingRequestStatusResult"
+                                   type="tns:TipaltiGetProcessingRequestStatusResult"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="TipaltiGetProcessingRequestStatusResult">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="errorMessage" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="errorCode" type="tns:WSErrors"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="requestStatus"
+                               type="tns:TipaltiProcessingRequestStatus"/>
+                </s:sequence>
+            </s:complexType>
+            <s:simpleType name="TipaltiProcessingRequestStatus">
+                <s:restriction base="s:string">
+                    <s:enumeration value="Processing"/>
+                    <s:enumeration value="Failed"/>
+                    <s:enumeration value="Cancelled"/>
+                    <s:enumeration value="Completed"/>
+                </s:restriction>
+            </s:simpleType>
+            <s:element name="ProcessPaymentsAsyncResult">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="payerName" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="requestId" type="s:long"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="timeStamp" type="s:double"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="ProcessPaymentsAsyncResultResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="ProcessPaymentsAsyncResultResult"
+                                   type="tns:TipaltiExpandedProcessPaymentResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="CreateExtendedPayeeStatusFile">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="payerName" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="timestamp" type="s:double"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="listType" nillable="true" type="s:int"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="saveToFile" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="changesSinceDate" nillable="true" type="s:double"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="CreateExtendedPayeeStatusFileResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="CreateExtendedPayeeStatusFileResult"
+                                   type="tns:TipaltiResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="TipaltiResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="errorMessage" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="errorCode" type="tns:WSErrors"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="b" nillable="true" type="s:boolean"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="i" nillable="true" type="s:int"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="d" nillable="true" type="s:double"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="s" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="CreatePayeeStatusFile">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="payerName" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="timestamp" type="s:double"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="saveToFile" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="changesSinceDate" type="s:double"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="CreatePayeeStatusFileResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="CreatePayeeStatusFileResult"
+                                   type="tns:TipaltiResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="GetDynamicKey">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="payerName" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="timestamp" type="s:double"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="GetDynamicKeyResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="GetDynamicKeyResult" type="tns:SecurityToken"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="SecurityToken">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="errorMessage" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="errorCode" type="tns:WSErrors"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Key" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Token" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="GetBalances">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="payerName" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="timestamp" type="s:double"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="GetBalancesResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="GetBalancesResult"
+                                   type="tns:TipaltiGetBalanceResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="TipaltiGetBalanceResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="errorMessage" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="errorCode" type="s:int"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="AccountInfos" type="tns:ArrayOfTipaltiAccountInfo"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ArrayOfTipaltiAccountInfo">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="TipaltiAccountInfo" nillable="true"
+                               type="tns:TipaltiAccountInfo"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="TipaltiAccountInfo">
+                <s:sequence>
+                    <s:element minOccurs="1" maxOccurs="1" name="AccountType" type="tns:eAccountType"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="currency" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="Balance" type="s:double"/>
+                </s:sequence>
+            </s:complexType>
+            <s:simpleType name="eAccountType">
+                <s:restriction base="s:string">
+                    <s:enumeration value="Bank"/>
+                    <s:enumeration value="PayPal"/>
+                    <s:enumeration value="PrePaidCard"/>
+                    <s:enumeration value="EntroPay"/>
+                    <s:enumeration value="Intercash"/>
+                    <s:enumeration value="AstroPay"/>
+                </s:restriction>
+            </s:simpleType>
+            <s:element name="GetUpdatedPayments">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="payerName" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="timestamp" type="s:double"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="changedSince" type="s:double"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="GetUpdatedPaymentsResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="GetUpdatedPaymentsResult"
+                                   type="tns:TipaltiGetUpdatedPaymentsResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="TipaltiGetUpdatedPaymentsResponse">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:TipaltiResponse">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="ChangedPaymentOrdersRefCode"
+                                       type="tns:ArrayOfString"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="ArrayOfString">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="GetPayerFees">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="payerName" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="timestamp" type="s:double"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="beginDateTimeStamp" type="s:double"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="endDateTimeStamp" type="s:double"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="GetPayerFeesResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="GetPayerFeesResult"
+                                   type="tns:TipaltiGetPayerFeesResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="TipaltiGetPayerFeesResponse">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:TipaltiResponse">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="TipaltiFees" type="tns:ArrayOfTipaltiFee"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="ArrayOfTipaltiFee">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="TipaltiFee" nillable="true"
+                               type="tns:TipaltiFee"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="TipaltiFee">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="TipaltiFeeReference" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="FeeCollectionDate" type="s:dateTime"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="FeeCurrency" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="FeeAmount" type="s:double"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="FeeDescription" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="CreateOrUpdateInvoices">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="payerName" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="timestamp" type="s:double"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="invoices" type="tns:ArrayOfTipaltiInvoiceItem"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="ArrayOfTipaltiInvoiceItem">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="TipaltiInvoiceItem" nillable="true"
+                               type="tns:TipaltiInvoiceItem"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="TipaltiInvoiceItem">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="Idap" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="InvoiceRefCode" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="InvoiceDate" type="s:dateTime"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="InvoiceDueDate" type="s:dateTime"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="InvoiceLines" type="tns:ArrayOfInvoiceLine"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="CanApprove" type="s:boolean"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="InvoiceInternalNotes" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="CustomFields" type="tns:ArrayOfKeyValuePair"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="IsPaidManually" type="s:boolean"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="IncomeType" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ArrayOfInvoiceLine">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="InvoiceLine" nillable="true"
+                               type="tns:InvoiceLine"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="InvoiceLine">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="Currency" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="Amount" type="s:double"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="InvoiceInternalNotes" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="EWalletMessage" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="BankingMessage" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="CustomFields" type="tns:ArrayOfKeyValuePair"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="CreateOrUpdateInvoicesResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="CreateOrUpdateInvoicesResult"
+                                   type="tns:TipaltiResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="GetPayeeInvoicesListDetails">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="payerName" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="timestamp" type="s:double"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="invoicesRefCodes" type="tns:ArrayOfString"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="GetPayeeInvoicesListDetailsResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="GetPayeeInvoicesListDetailsResult"
+                                   type="tns:TipaltiGetPayeeInvoicesListDetailsResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="TipaltiGetPayeeInvoicesListDetailsResponse">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:TipaltiResponse">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="InvoiceErrors"
+                                       type="tns:ArrayOfTipaltiInvoiceItemError"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="Invoices"
+                                       type="tns:ArrayOfTipaltiInvoiceItem"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="ArrayOfTipaltiInvoiceItemError">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="TipaltiInvoiceItemError" nillable="true"
+                               type="tns:TipaltiInvoiceItemError"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="TipaltiInvoiceItemError">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="ErrorMessage" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="ErrorCode" type="tns:WSErrors"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="InvoiceRefCode" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="CreateOrUpdateCustomFields">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="payerName" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="timestamp" type="s:double"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="customFieldInfo"
+                                   type="tns:ArrayOfTipaltiCustomField"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="ArrayOfTipaltiCustomField">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="TipaltiCustomField" nillable="true"
+                               type="tns:TipaltiCustomField"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="TipaltiCustomField">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="Title" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="Action" type="tns:CustomFieldAction"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="Entity" type="tns:CustomFieldEntity"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="SubEntity" nillable="true"
+                               type="tns:CustomFieldSubEntity"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="Type" type="tns:CustomFieldType"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="IframeDisplay" nillable="true" type="s:boolean"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Values" type="tns:ArrayOfCustomFieldValue"/>
+                </s:sequence>
+            </s:complexType>
+            <s:simpleType name="CustomFieldAction">
+                <s:restriction base="s:string">
+                    <s:enumeration value="CreateOrUpdate"/>
+                    <s:enumeration value="Delete"/>
+                </s:restriction>
+            </s:simpleType>
+            <s:simpleType name="CustomFieldEntity">
+                <s:restriction base="s:string">
+                    <s:enumeration value="PaymentOrder"/>
+                    <s:enumeration value="Payee"/>
+                    <s:enumeration value="Invoice"/>
+                </s:restriction>
+            </s:simpleType>
+            <s:simpleType name="CustomFieldSubEntity">
+                <s:restriction base="s:string">
+                    <s:enumeration value="Bill"/>
+                    <s:enumeration value="BillLine"/>
+                </s:restriction>
+            </s:simpleType>
+            <s:simpleType name="CustomFieldType">
+                <s:restriction base="s:string">
+                    <s:enumeration value="FreeText"/>
+                    <s:enumeration value="UniqueText"/>
+                    <s:enumeration value="MultipleValues"/>
+                    <s:enumeration value="ListOfValues"/>
+                </s:restriction>
+            </s:simpleType>
+            <s:element name="CreateOrUpdateCustomFieldsResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="CreateOrUpdateCustomFieldsResult"
+                                   type="tns:TipaltiCustomFieldsUpdateResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="TipaltiCustomFieldsUpdateResponse">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:TipaltiResponse">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="CustomFieldUpdateResult"
+                                       type="tns:ArrayOfTipaltiCustomFieldUpdateResponse"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="ArrayOfTipaltiCustomFieldUpdateResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="TipaltiCustomFieldUpdateResponse"
+                               nillable="true" type="tns:TipaltiCustomFieldUpdateResponse"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="TipaltiCustomFieldUpdateResponse">
+                <s:sequence>
+                    <s:element minOccurs="1" maxOccurs="1" name="Result" type="tns:CustomFieldUpdateResult"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Message" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="CustomField" type="tns:TipaltiCustomField"/>
+                </s:sequence>
+            </s:complexType>
+            <s:simpleType name="CustomFieldUpdateResult">
+                <s:restriction base="s:string">
+                    <s:enumeration value="Other"/>
+                    <s:enumeration value="Success"/>
+                    <s:enumeration value="FieldDoesntExist"/>
+                    <s:enumeration value="DuplicateField"/>
+                    <s:enumeration value="EmptyTitle"/>
+                    <s:enumeration value="TooLongTitle"/>
+                    <s:enumeration value="IllegalCharsTitle"/>
+                    <s:enumeration value="RestrictedTitle"/>
+                    <s:enumeration value="EmptyMultiValueSelectionField"/>
+                    <s:enumeration value="MultiValuesAreNotUnique"/>
+                    <s:enumeration value="ValueTypeNotSupported"/>
+                    <s:enumeration value="UnknownPayerEntity"/>
+                </s:restriction>
+            </s:simpleType>
+            <s:element name="LogIntegrationError">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="payerName" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="timestamp" type="s:double"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="item" type="tns:IntegrationErrorItem"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="IntegrationErrorItem">
+                <s:sequence>
+                    <s:element minOccurs="1" maxOccurs="1" name="CreationTimestamp" type="s:long"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="SyncDirection" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ErrorSubject" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ErrorDetails" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="IntegrationName" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="IntegrationVersion" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="LogIntegrationErrorResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="LogIntegrationErrorResult"
+                                   type="tns:TipaltiResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="ApplyVendorCredit">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="payerName" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="timestamp" type="s:double"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="vendorCreditRefCode" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="relatedInvoices" type="tns:ArrayOfRelatedInvoice"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="ArrayOfRelatedInvoice">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="RelatedInvoice" nillable="true"
+                               type="tns:RelatedInvoice"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="RelatedInvoice">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="InvoiceRefCode" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="AppliedAmount" type="s:decimal"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="ApplyVendorCreditResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="ApplyVendorCreditResult"
+                                   type="tns:TipaltiApplyVendorCreditResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="TipaltiApplyVendorCreditResponse">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:TipaltiResponse">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="InvoiceResponses"
+                                       type="tns:ArrayOfTipaltiApplyVendorCreditItemResponse"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="VendorCreditResponse"
+                                       type="tns:TipaltiApplyVendorCreditItemResponse"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="ArrayOfTipaltiApplyVendorCreditItemResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="TipaltiApplyVendorCreditItemResponse"
+                               nillable="true" type="tns:TipaltiApplyVendorCreditItemResponse"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="TipaltiApplyVendorCreditItemResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="ErrorMessage" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="Succeeded" type="s:boolean"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="InvoiceRefCode" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+        </s:schema>
+    </wsdl:types>
+    <wsdl:message name="CreatePaymentOrdersReportSoapIn">
+        <wsdl:part name="parameters" element="tns:CreatePaymentOrdersReport"/>
+    </wsdl:message>
+    <wsdl:message name="CreatePaymentOrdersReportSoapOut">
+        <wsdl:part name="parameters" element="tns:CreatePaymentOrdersReportResponse"/>
+    </wsdl:message>
+    <wsdl:message name="TestPaymentFileSoapIn">
+        <wsdl:part name="parameters" element="tns:TestPaymentFile"/>
+    </wsdl:message>
+    <wsdl:message name="TestPaymentFileSoapOut">
+        <wsdl:part name="parameters" element="tns:TestPaymentFileResponse"/>
+    </wsdl:message>
+    <wsdl:message name="TestMultiCurrencyPaymentFileSoapIn">
+        <wsdl:part name="parameters" element="tns:TestMultiCurrencyPaymentFile"/>
+    </wsdl:message>
+    <wsdl:message name="TestMultiCurrencyPaymentFileSoapOut">
+        <wsdl:part name="parameters" element="tns:TestMultiCurrencyPaymentFileResponse"/>
+    </wsdl:message>
+    <wsdl:message name="ProcessPaymentFileSoapIn">
+        <wsdl:part name="parameters" element="tns:ProcessPaymentFile"/>
+    </wsdl:message>
+    <wsdl:message name="ProcessPaymentFileSoapOut">
+        <wsdl:part name="parameters" element="tns:ProcessPaymentFileResponse"/>
+    </wsdl:message>
+    <wsdl:message name="GetCustomFieldsSoapIn">
+        <wsdl:part name="parameters" element="tns:GetCustomFields"/>
+    </wsdl:message>
+    <wsdl:message name="GetCustomFieldsSoapOut">
+        <wsdl:part name="parameters" element="tns:GetCustomFieldsResponse"/>
+    </wsdl:message>
+    <wsdl:message name="GetProviderAccountsSoapIn">
+        <wsdl:part name="parameters" element="tns:GetProviderAccounts"/>
+    </wsdl:message>
+    <wsdl:message name="GetProviderAccountsSoapOut">
+        <wsdl:part name="parameters" element="tns:GetProviderAccountsResponse"/>
+    </wsdl:message>
+    <wsdl:message name="ProcessMultiCurrencyPaymentFileSoapIn">
+        <wsdl:part name="parameters" element="tns:ProcessMultiCurrencyPaymentFile"/>
+    </wsdl:message>
+    <wsdl:message name="ProcessMultiCurrencyPaymentFileSoapOut">
+        <wsdl:part name="parameters" element="tns:ProcessMultiCurrencyPaymentFileResponse"/>
+    </wsdl:message>
+    <wsdl:message name="GetDynamicKeyOfSubPayerSoapIn">
+        <wsdl:part name="parameters" element="tns:GetDynamicKeyOfSubPayer"/>
+    </wsdl:message>
+    <wsdl:message name="GetDynamicKeyOfSubPayerSoapOut">
+        <wsdl:part name="parameters" element="tns:GetDynamicKeyOfSubPayerResponse"/>
+    </wsdl:message>
+    <wsdl:message name="ProcessPaymentsSoapIn">
+        <wsdl:part name="parameters" element="tns:ProcessPayments"/>
+    </wsdl:message>
+    <wsdl:message name="ProcessPaymentsSoapOut">
+        <wsdl:part name="parameters" element="tns:ProcessPaymentsResponse"/>
+    </wsdl:message>
+    <wsdl:message name="TestPaymentsSoapIn">
+        <wsdl:part name="parameters" element="tns:TestPayments"/>
+    </wsdl:message>
+    <wsdl:message name="TestPaymentsSoapOut">
+        <wsdl:part name="parameters" element="tns:TestPaymentsResponse"/>
+    </wsdl:message>
+    <wsdl:message name="ProcessPaymentsAsyncSoapIn">
+        <wsdl:part name="parameters" element="tns:ProcessPaymentsAsync"/>
+    </wsdl:message>
+    <wsdl:message name="ProcessPaymentsAsyncSoapOut">
+        <wsdl:part name="parameters" element="tns:ProcessPaymentsAsyncResponse"/>
+    </wsdl:message>
+    <wsdl:message name="TestPaymentsAsyncSoapIn">
+        <wsdl:part name="parameters" element="tns:TestPaymentsAsync"/>
+    </wsdl:message>
+    <wsdl:message name="TestPaymentsAsyncSoapOut">
+        <wsdl:part name="parameters" element="tns:TestPaymentsAsyncResponse"/>
+    </wsdl:message>
+    <wsdl:message name="ProcessPaymentFileAsyncSoapIn">
+        <wsdl:part name="parameters" element="tns:ProcessPaymentFileAsync"/>
+    </wsdl:message>
+    <wsdl:message name="ProcessPaymentFileAsyncSoapOut">
+        <wsdl:part name="parameters" element="tns:ProcessPaymentFileAsyncResponse"/>
+    </wsdl:message>
+    <wsdl:message name="TestPaymentFileAsyncSoapIn">
+        <wsdl:part name="parameters" element="tns:TestPaymentFileAsync"/>
+    </wsdl:message>
+    <wsdl:message name="TestPaymentFileAsyncSoapOut">
+        <wsdl:part name="parameters" element="tns:TestPaymentFileAsyncResponse"/>
+    </wsdl:message>
+    <wsdl:message name="TestMultiCurrencyPaymentFileAsyncSoapIn">
+        <wsdl:part name="parameters" element="tns:TestMultiCurrencyPaymentFileAsync"/>
+    </wsdl:message>
+    <wsdl:message name="TestMultiCurrencyPaymentFileAsyncSoapOut">
+        <wsdl:part name="parameters" element="tns:TestMultiCurrencyPaymentFileAsyncResponse"/>
+    </wsdl:message>
+    <wsdl:message name="ProcessMultiCurrencyPaymentFileAsyncSoapIn">
+        <wsdl:part name="parameters" element="tns:ProcessMultiCurrencyPaymentFileAsync"/>
+    </wsdl:message>
+    <wsdl:message name="ProcessMultiCurrencyPaymentFileAsyncSoapOut">
+        <wsdl:part name="parameters" element="tns:ProcessMultiCurrencyPaymentFileAsyncResponse"/>
+    </wsdl:message>
+    <wsdl:message name="GetProcessingRequestStatusSoapIn">
+        <wsdl:part name="parameters" element="tns:GetProcessingRequestStatus"/>
+    </wsdl:message>
+    <wsdl:message name="GetProcessingRequestStatusSoapOut">
+        <wsdl:part name="parameters" element="tns:GetProcessingRequestStatusResponse"/>
+    </wsdl:message>
+    <wsdl:message name="ProcessPaymentsAsyncResultSoapIn">
+        <wsdl:part name="parameters" element="tns:ProcessPaymentsAsyncResult"/>
+    </wsdl:message>
+    <wsdl:message name="ProcessPaymentsAsyncResultSoapOut">
+        <wsdl:part name="parameters" element="tns:ProcessPaymentsAsyncResultResponse"/>
+    </wsdl:message>
+    <wsdl:message name="CreateExtendedPayeeStatusFileSoapIn">
+        <wsdl:part name="parameters" element="tns:CreateExtendedPayeeStatusFile"/>
+    </wsdl:message>
+    <wsdl:message name="CreateExtendedPayeeStatusFileSoapOut">
+        <wsdl:part name="parameters" element="tns:CreateExtendedPayeeStatusFileResponse"/>
+    </wsdl:message>
+    <wsdl:message name="CreatePayeeStatusFileSoapIn">
+        <wsdl:part name="parameters" element="tns:CreatePayeeStatusFile"/>
+    </wsdl:message>
+    <wsdl:message name="CreatePayeeStatusFileSoapOut">
+        <wsdl:part name="parameters" element="tns:CreatePayeeStatusFileResponse"/>
+    </wsdl:message>
+    <wsdl:message name="GetDynamicKeySoapIn">
+        <wsdl:part name="parameters" element="tns:GetDynamicKey"/>
+    </wsdl:message>
+    <wsdl:message name="GetDynamicKeySoapOut">
+        <wsdl:part name="parameters" element="tns:GetDynamicKeyResponse"/>
+    </wsdl:message>
+    <wsdl:message name="GetBalancesSoapIn">
+        <wsdl:part name="parameters" element="tns:GetBalances"/>
+    </wsdl:message>
+    <wsdl:message name="GetBalancesSoapOut">
+        <wsdl:part name="parameters" element="tns:GetBalancesResponse"/>
+    </wsdl:message>
+    <wsdl:message name="GetUpdatedPaymentsSoapIn">
+        <wsdl:part name="parameters" element="tns:GetUpdatedPayments"/>
+    </wsdl:message>
+    <wsdl:message name="GetUpdatedPaymentsSoapOut">
+        <wsdl:part name="parameters" element="tns:GetUpdatedPaymentsResponse"/>
+    </wsdl:message>
+    <wsdl:message name="GetPayerFeesSoapIn">
+        <wsdl:part name="parameters" element="tns:GetPayerFees"/>
+    </wsdl:message>
+    <wsdl:message name="GetPayerFeesSoapOut">
+        <wsdl:part name="parameters" element="tns:GetPayerFeesResponse"/>
+    </wsdl:message>
+    <wsdl:message name="CreateOrUpdateInvoicesSoapIn">
+        <wsdl:part name="parameters" element="tns:CreateOrUpdateInvoices"/>
+    </wsdl:message>
+    <wsdl:message name="CreateOrUpdateInvoicesSoapOut">
+        <wsdl:part name="parameters" element="tns:CreateOrUpdateInvoicesResponse"/>
+    </wsdl:message>
+    <wsdl:message name="GetPayeeInvoicesListDetailsSoapIn">
+        <wsdl:part name="parameters" element="tns:GetPayeeInvoicesListDetails"/>
+    </wsdl:message>
+    <wsdl:message name="GetPayeeInvoicesListDetailsSoapOut">
+        <wsdl:part name="parameters" element="tns:GetPayeeInvoicesListDetailsResponse"/>
+    </wsdl:message>
+    <wsdl:message name="CreateOrUpdateCustomFieldsSoapIn">
+        <wsdl:part name="parameters" element="tns:CreateOrUpdateCustomFields"/>
+    </wsdl:message>
+    <wsdl:message name="CreateOrUpdateCustomFieldsSoapOut">
+        <wsdl:part name="parameters" element="tns:CreateOrUpdateCustomFieldsResponse"/>
+    </wsdl:message>
+    <wsdl:message name="LogIntegrationErrorSoapIn">
+        <wsdl:part name="parameters" element="tns:LogIntegrationError"/>
+    </wsdl:message>
+    <wsdl:message name="LogIntegrationErrorSoapOut">
+        <wsdl:part name="parameters" element="tns:LogIntegrationErrorResponse"/>
+    </wsdl:message>
+    <wsdl:message name="ApplyVendorCreditSoapIn">
+        <wsdl:part name="parameters" element="tns:ApplyVendorCredit"/>
+    </wsdl:message>
+    <wsdl:message name="ApplyVendorCreditSoapOut">
+        <wsdl:part name="parameters" element="tns:ApplyVendorCreditResponse"/>
+    </wsdl:message>
+    <wsdl:portType name="TipaltiPayerSOAPSoap">
+        <wsdl:operation name="CreatePaymentOrdersReport">
+            <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                Create payment orders report. Return value is the report file name that is written to the SFTP
+                folder.</br>The details file format may change over time. Columns may be added. When reading the file
+            ensure you have functionality that can ignore new, additional, columns.
+        </br>
+        The report is on all the payment orders between startTime and endTime parameters.<br/>EAT - none
+    </wsdl:documentation>
+    <wsdl:input message="tns:CreatePaymentOrdersReportSoapIn"/>
+    <wsdl:output message="tns:CreatePaymentOrdersReportSoapOut"/>
+</wsdl:operation>
+<wsdl:operation name="TestPaymentFile">
+<wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    Test a payment file. File should be pre-loaded to the SFTP folder assigned by Tipalti.Return value includes warnings
+    and errors, including line number in file. An 'OK' errorMessage means that the payment file can be submitted. NO
+    PAYMENTS WILL BE EXECUTED.<br/>EAT - totalAmount
+</wsdl:documentation>
+<wsdl:input message="tns:TestPaymentFileSoapIn"/>
+<wsdl:output message="tns:TestPaymentFileSoapOut"/>
+</wsdl:operation>
+<wsdl:operation name="TestMultiCurrencyPaymentFile">
+<wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    Test a payment file. File should be pre-loaded to the SFTP folder assigned by Tipalti.Return value includes warnings
+    and errors, including line number in file. An 'OK' errorMessage means that the payment file can be submitted. NO
+    PAYMENTS WILL BE EXECUTED.<br/>EAT - fileName
+</wsdl:documentation>
+<wsdl:input message="tns:TestMultiCurrencyPaymentFileSoapIn"/>
+<wsdl:output message="tns:TestMultiCurrencyPaymentFileSoapOut"/>
+</wsdl:operation>
+<wsdl:operation name="ProcessPaymentFile">
+<wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    Submit file for payment. File should be pre-loaded to the SFTP folder assigned by Tipalti.Return value includes
+    warnings and errors, including line number in file. An 'OK' errorMessage means that the payments were submitted.
+    <br/>EAT - totalAmount
+</wsdl:documentation>
+<wsdl:input message="tns:ProcessPaymentFileSoapIn"/>
+<wsdl:output message="tns:ProcessPaymentFileSoapOut"/>
+</wsdl:operation>
+<wsdl:operation name="GetCustomFields">
+<wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Return the payer custom fields</wsdl:documentation>
+<wsdl:input message="tns:GetCustomFieldsSoapIn"/>
+<wsdl:output message="tns:GetCustomFieldsSoapOut"/>
+</wsdl:operation>
+<wsdl:operation name="GetProviderAccounts">
+<wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Return the payer provider accounts info
+</wsdl:documentation>
+<wsdl:input message="tns:GetProviderAccountsSoapIn"/>
+<wsdl:output message="tns:GetProviderAccountsSoapOut"/>
+</wsdl:operation>
+<wsdl:operation name="ProcessMultiCurrencyPaymentFile">
+<wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    Submit file for payment. File should be pre-loaded to the SFTP folder assigned by Tipalti.Return value includes
+    warnings and errors, including line number in file. An 'OK' errorMessage means that the payments were submitted.
+    <br/>EAT - fileName
+</wsdl:documentation>
+<wsdl:input message="tns:ProcessMultiCurrencyPaymentFileSoapIn"/>
+<wsdl:output message="tns:ProcessMultiCurrencyPaymentFileSoapOut"/>
+</wsdl:operation>
+<wsdl:operation name="GetDynamicKeyOfSubPayer">
+<wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    Get dynamic encryption key of sub payer. the dynamic key is encrypted with the parent payer key.The SecurityToken
+    object returns contains an encrypted key and a token. Use the key to sign the query string.<br>You must send the
+    token within the query string of the iFrame. To do that, set its value to a Query String parameter named 'token'.
+    <br>The key is a temporary key and will expire within the time limit you have set in the administration console.
+    <br>
+        <b>Do not send the key over the wire or include it in the query string. Store it in a secure location.</b>
+    </br>
+    EAT - subPayerName
+</wsdl:documentation>
+<wsdl:input message="tns:GetDynamicKeyOfSubPayerSoapIn"/>
+<wsdl:output message="tns:GetDynamicKeyOfSubPayerSoapOut"/>
+</wsdl:operation>
+<wsdl:operation name="ProcessPayments">
+<wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    Process payments in a list.<br/>Return value includes warnings and errors.<br/>Payment list can be no more than 250
+    item long.<br/>EAT - paymentGroupTitle
+</wsdl:documentation>
+<wsdl:input message="tns:ProcessPaymentsSoapIn"/>
+<wsdl:output message="tns:ProcessPaymentsSoapOut"/>
+</wsdl:operation>
+<wsdl:operation name="TestPayments">
+<wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    Test payments in a list.<br/>Return value includes warnings and errors.
+    <br/>
+    Payment list can be no more than 250 item long. NO PAYMENTS WILL BE EXECUTED<br/>EAT - paymentGroupTitle
+</wsdl:documentation>
+<wsdl:input message="tns:TestPaymentsSoapIn"/>
+<wsdl:output message="tns:TestPaymentsSoapOut"/>
+</wsdl:operation>
+<wsdl:operation name="ProcessPaymentsAsync">
+<wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    Process payments in a list asynchronously.<br/>Return value includes warnings, errors and request idRequest id can
+    be used to check the processing status and get the processing result.<br/>Payment list can be no more than 250 item
+    long.<br/>EAT - paymentGroupTitle
+</wsdl:documentation>
+<wsdl:input message="tns:ProcessPaymentsAsyncSoapIn"/>
+<wsdl:output message="tns:ProcessPaymentsAsyncSoapOut"/>
+</wsdl:operation>
+<wsdl:operation name="TestPaymentsAsync">
+<wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    Test payments in a list asynchronously.<br/>Return value includes warnings, errors and request idRequest id can be
+    used to check the processing status and get the processing result.<br/>Payment list can be no more than 250 item
+    long.<br/>EAT - paymentGroupTitle
+</wsdl:documentation>
+<wsdl:input message="tns:TestPaymentsAsyncSoapIn"/>
+<wsdl:output message="tns:TestPaymentsAsyncSoapOut"/>
+</wsdl:operation>
+<wsdl:operation name="ProcessPaymentFileAsync">
+<wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    Process file for payment asynchronously.<br/>File should be pre-loaded to the SFTP folder assigned by Tipalti.<br/>
+    Return value includes warnings, errors, and request idRequest id can be used to check the processing status and get
+    the processing result.<br/>EAT - totalAmount
+</wsdl:documentation>
+<wsdl:input message="tns:ProcessPaymentFileAsyncSoapIn"/>
+<wsdl:output message="tns:ProcessPaymentFileAsyncSoapOut"/>
+</wsdl:operation>
+<wsdl:operation name="TestPaymentFileAsync">
+<wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    Test payment file asynchronously.<br/>File should be pre-loaded to the SFTP folder assigned by Tipalti.<br/>Return
+    value includes warnings, errors, and request idRequest id can be used to check the processing status and get the
+    processing result.<br/>EAT - totalAmount
+</wsdl:documentation>
+<wsdl:input message="tns:TestPaymentFileAsyncSoapIn"/>
+<wsdl:output message="tns:TestPaymentFileAsyncSoapOut"/>
+</wsdl:operation>
+<wsdl:operation name="TestMultiCurrencyPaymentFileAsync">
+<wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    Test a multi currency payment file asynchronously.<br/>File should be pre-loaded to the SFTP folder assigned by
+    Tipalti.<br/>Return value includes warnings, errors, and request idRequest id can be used to check the processing
+    status and get the processing result.<br/>EAT - totalAmount
+</wsdl:documentation>
+<wsdl:input message="tns:TestMultiCurrencyPaymentFileAsyncSoapIn"/>
+<wsdl:output message="tns:TestMultiCurrencyPaymentFileAsyncSoapOut"/>
+</wsdl:operation>
+<wsdl:operation name="ProcessMultiCurrencyPaymentFileAsync">
+<wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    Process a multi currency payment file asynchronously.<br/>File should be pre-loaded to the SFTP folder assigned by
+    Tipalti.<br/>Return value includes warnings, errors, and request idRequest id can be used to check the processing
+    status and get the processing result.<br/>EAT - totalAmount
+</wsdl:documentation>
+<wsdl:input message="tns:ProcessMultiCurrencyPaymentFileAsyncSoapIn"/>
+<wsdl:output message="tns:ProcessMultiCurrencyPaymentFileAsyncSoapOut"/>
+</wsdl:operation>
+<wsdl:operation name="GetProcessingRequestStatus">
+<wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    Returns the current status of an ansynchronous processing request.<br/>Return value includes warnings and errors.
+    <br/>EAT - requestId
+</wsdl:documentation>
+<wsdl:input message="tns:GetProcessingRequestStatusSoapIn"/>
+<wsdl:output message="tns:GetProcessingRequestStatusSoapOut"/>
+</wsdl:operation>
+<wsdl:operation name="ProcessPaymentsAsyncResult">
+<wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    Returns the result of an ansynchronous process payments call.<br/>Return value includes warnings and errors.<br/>EAT
+    - requestId
+</wsdl:documentation>
+<wsdl:input message="tns:ProcessPaymentsAsyncResultSoapIn"/>
+<wsdl:output message="tns:ProcessPaymentsAsyncResultSoapOut"/>
+</wsdl:operation>
+<wsdl:operation name="CreateExtendedPayeeStatusFile">
+<wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    Create a file with the status of all payees in the system.<br/>listType possible values: (1-All
+    (Default),2-Payable,3-UnPayable).<br/>changesSinceDate is an optional parameter to limit the report to the payees
+    that changed their info since that date.<br/>The CSV file is placed in the payer's SFTP folder. If a file by this
+    name already exists, it will be removed.
+    <br/>
+    EAT - saveToFile
+</wsdl:documentation>
+<wsdl:input message="tns:CreateExtendedPayeeStatusFileSoapIn"/>
+<wsdl:output message="tns:CreateExtendedPayeeStatusFileSoapOut"/>
+</wsdl:operation>
+<wsdl:operation name="CreatePayeeStatusFile">
+<wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    Create a file with the status of all payees in the system.<br/>changesSinceDate is an optional paramter to limit the
+    report to the payees that changed their info since that date.<br/>The CSV file is placed in the payer's SFTP folder
+    and has the following format: payee ID, payment method, status, reason.<br/>If a file by this name already exists,
+    it will be removed.
+    <br/>
+    EAT - saveToFile
+</wsdl:documentation>
+<wsdl:input message="tns:CreatePayeeStatusFileSoapIn"/>
+<wsdl:output message="tns:CreatePayeeStatusFileSoapOut"/>
+</wsdl:operation>
+<wsdl:operation name="GetDynamicKey">
+<wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    Returns a dynamic security key that can be used to sign the content of the Tipalti iFrame Query String.<br>The
+    SecurityToken object returns contains a key and a token. Use the key to sign the query string.<br>You must send the
+    token within the query string of the iFrame. To do that, set its value to a Query String parameter named 'token'<br>
+    The key is a temporary key and will expire within the time limit you have set in the administration console
+    <br>
+        <b>Do not send the key over the wire or include it in the query string. Store it in a secure location.</b>
+    </br>
+    EAT - none
+</wsdl:documentation>
+<wsdl:input message="tns:GetDynamicKeySoapIn"/>
+<wsdl:output message="tns:GetDynamicKeySoapOut"/>
+</wsdl:operation>
+<wsdl:operation name="GetBalances">
+<wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    Get balances in your accounts. Returns account type, currency and amout in balance.<br/>Note: when submitting a
+    payment, the balance may take some time before it is updated<br/>EAT - none
+</wsdl:documentation>
+<wsdl:input message="tns:GetBalancesSoapIn"/>
+<wsdl:output message="tns:GetBalancesSoapOut"/>
+</wsdl:operation>
+<wsdl:operation name="GetUpdatedPayments">
+<wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    Return ref codes of POs which were updated since a given timestamp.<br/>EAT - null
+</wsdl:documentation>
+<wsdl:input message="tns:GetUpdatedPaymentsSoapIn"/>
+<wsdl:output message="tns:GetUpdatedPaymentsSoapOut"/>
+</wsdl:operation>
+<wsdl:operation name="GetPayerFees">
+<wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    Return list of payer fees charged between specific dates.<br/>EAT - null
+</wsdl:documentation>
+<wsdl:input message="tns:GetPayerFeesSoapIn"/>
+<wsdl:output message="tns:GetPayerFeesSoapOut"/>
+</wsdl:operation>
+<wsdl:operation name="CreateOrUpdateInvoices">
+<wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    create new invoices or update existing ones.<br/>EAT - null
+</wsdl:documentation>
+<wsdl:input message="tns:CreateOrUpdateInvoicesSoapIn"/>
+<wsdl:output message="tns:CreateOrUpdateInvoicesSoapOut"/>
+</wsdl:operation>
+<wsdl:operation name="GetPayeeInvoicesListDetails">
+<wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Return list of payee invoices.<br/>EAT - null
+</wsdl:documentation>
+<wsdl:input message="tns:GetPayeeInvoicesListDetailsSoapIn"/>
+<wsdl:output message="tns:GetPayeeInvoicesListDetailsSoapOut"/>
+</wsdl:operation>
+<wsdl:operation name="CreateOrUpdateCustomFields">
+<wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    Create update or delete custom fields. Custom fields type can be created as: .<br/>1. Free text - the user can enter
+    any free text.<br/>2. Unique text - the value can enter any text. The value will be validated as unique.<br/>3.
+    Multiple values - the user can select multiple values from a predefined list of values.<br/>4. List of values - the
+    user can select a single value from a predefined list of values.<br/>EAT - null
+</wsdl:documentation>
+<wsdl:input message="tns:CreateOrUpdateCustomFieldsSoapIn"/>
+<wsdl:output message="tns:CreateOrUpdateCustomFieldsSoapOut"/>
+</wsdl:operation>
+<wsdl:operation name="LogIntegrationError">
+<wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    Log integration errors from Tipalti/Apps (NetSuite/QuickBooks/etc...) Integrations
+</wsdl:documentation>
+<wsdl:input message="tns:LogIntegrationErrorSoapIn"/>
+<wsdl:output message="tns:LogIntegrationErrorSoapOut"/>
+</wsdl:operation>
+<wsdl:operation name="ApplyVendorCredit">
+<wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Applies vendor credit for related bills
+</wsdl:documentation>
+<wsdl:input message="tns:ApplyVendorCreditSoapIn"/>
+<wsdl:output message="tns:ApplyVendorCreditSoapOut"/>
+</wsdl:operation>
+        </wsdl:portType>
+<wsdl:binding name="TipaltiPayerSOAPSoap" type="tns:TipaltiPayerSOAPSoap">
+<soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+<wsdl:operation name="CreatePaymentOrdersReport">
+    <soap:operation soapAction="http://Tipalti.org/CreatePaymentOrdersReport" style="document"/>
+    <wsdl:input>
+        <soap:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="TestPaymentFile">
+    <soap:operation soapAction="http://Tipalti.org/TestPaymentFile" style="document"/>
+    <wsdl:input>
+        <soap:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="TestMultiCurrencyPaymentFile">
+    <soap:operation soapAction="http://Tipalti.org/TestMultiCurrencyPaymentFile" style="document"/>
+    <wsdl:input>
+        <soap:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="ProcessPaymentFile">
+    <soap:operation soapAction="http://Tipalti.org/ProcessPaymentFile" style="document"/>
+    <wsdl:input>
+        <soap:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="GetCustomFields">
+    <soap:operation soapAction="http://Tipalti.org/GetCustomFields" style="document"/>
+    <wsdl:input>
+        <soap:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="GetProviderAccounts">
+    <soap:operation soapAction="http://Tipalti.org/GetProviderAccounts" style="document"/>
+    <wsdl:input>
+        <soap:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="ProcessMultiCurrencyPaymentFile">
+    <soap:operation soapAction="http://Tipalti.org/ProcessMultiCurrencyPaymentFile" style="document"/>
+    <wsdl:input>
+        <soap:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="GetDynamicKeyOfSubPayer">
+    <soap:operation soapAction="http://Tipalti.org/GetDynamicKeyOfSubPayer" style="document"/>
+    <wsdl:input>
+        <soap:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="ProcessPayments">
+    <soap:operation soapAction="http://Tipalti.org/ProcessPayments" style="document"/>
+    <wsdl:input>
+        <soap:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="TestPayments">
+    <soap:operation soapAction="http://Tipalti.org/TestPayments" style="document"/>
+    <wsdl:input>
+        <soap:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="ProcessPaymentsAsync">
+    <soap:operation soapAction="http://Tipalti.org/ProcessPaymentsAsync" style="document"/>
+    <wsdl:input>
+        <soap:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="TestPaymentsAsync">
+    <soap:operation soapAction="http://Tipalti.org/TestPaymentsAsync" style="document"/>
+    <wsdl:input>
+        <soap:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="ProcessPaymentFileAsync">
+    <soap:operation soapAction="http://Tipalti.org/ProcessPaymentFileAsync" style="document"/>
+    <wsdl:input>
+        <soap:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="TestPaymentFileAsync">
+    <soap:operation soapAction="http://Tipalti.org/TestPaymentFileAsync" style="document"/>
+    <wsdl:input>
+        <soap:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="TestMultiCurrencyPaymentFileAsync">
+    <soap:operation soapAction="http://Tipalti.org/TestMultiCurrencyPaymentFileAsync" style="document"/>
+    <wsdl:input>
+        <soap:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="ProcessMultiCurrencyPaymentFileAsync">
+    <soap:operation soapAction="http://Tipalti.org/ProcessMultiCurrencyPaymentFileAsync" style="document"/>
+    <wsdl:input>
+        <soap:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="GetProcessingRequestStatus">
+    <soap:operation soapAction="http://Tipalti.org/GetProcessingRequestStatus" style="document"/>
+    <wsdl:input>
+        <soap:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="ProcessPaymentsAsyncResult">
+    <soap:operation soapAction="http://Tipalti.org/ProcessPaymentsAsyncResult" style="document"/>
+    <wsdl:input>
+        <soap:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="CreateExtendedPayeeStatusFile">
+    <soap:operation soapAction="http://Tipalti.org/CreateExtendedPayeeStatusFile" style="document"/>
+    <wsdl:input>
+        <soap:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="CreatePayeeStatusFile">
+    <soap:operation soapAction="http://Tipalti.org/CreatePayeeStatusFile" style="document"/>
+    <wsdl:input>
+        <soap:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="GetDynamicKey">
+    <soap:operation soapAction="http://Tipalti.org/GetDynamicKey" style="document"/>
+    <wsdl:input>
+        <soap:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="GetBalances">
+    <soap:operation soapAction="http://Tipalti.org/GetBalances" style="document"/>
+    <wsdl:input>
+        <soap:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="GetUpdatedPayments">
+    <soap:operation soapAction="http://Tipalti.org/GetUpdatedPayments" style="document"/>
+    <wsdl:input>
+        <soap:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="GetPayerFees">
+    <soap:operation soapAction="http://Tipalti.org/GetPayerFees" style="document"/>
+    <wsdl:input>
+        <soap:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="CreateOrUpdateInvoices">
+    <soap:operation soapAction="http://Tipalti.org/CreateOrUpdateInvoices" style="document"/>
+    <wsdl:input>
+        <soap:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="GetPayeeInvoicesListDetails">
+    <soap:operation soapAction="http://Tipalti.org/GetPayeeInvoicesListDetails" style="document"/>
+    <wsdl:input>
+        <soap:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="CreateOrUpdateCustomFields">
+    <soap:operation soapAction="http://Tipalti.org/CreateOrUpdateCustomFields" style="document"/>
+    <wsdl:input>
+        <soap:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="LogIntegrationError">
+    <soap:operation soapAction="http://Tipalti.org/LogIntegrationError" style="document"/>
+    <wsdl:input>
+        <soap:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="ApplyVendorCredit">
+    <soap:operation soapAction="http://Tipalti.org/ApplyVendorCredit" style="document"/>
+    <wsdl:input>
+        <soap:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+</wsdl:binding>
+<wsdl:binding name="TipaltiPayerSOAPSoap12" type="tns:TipaltiPayerSOAPSoap">
+<soap12:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+<wsdl:operation name="CreatePaymentOrdersReport">
+    <soap12:operation soapAction="http://Tipalti.org/CreatePaymentOrdersReport" style="document"/>
+    <wsdl:input>
+        <soap12:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap12:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="TestPaymentFile">
+    <soap12:operation soapAction="http://Tipalti.org/TestPaymentFile" style="document"/>
+    <wsdl:input>
+        <soap12:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap12:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="TestMultiCurrencyPaymentFile">
+    <soap12:operation soapAction="http://Tipalti.org/TestMultiCurrencyPaymentFile" style="document"/>
+    <wsdl:input>
+        <soap12:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap12:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="ProcessPaymentFile">
+    <soap12:operation soapAction="http://Tipalti.org/ProcessPaymentFile" style="document"/>
+    <wsdl:input>
+        <soap12:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap12:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="GetCustomFields">
+    <soap12:operation soapAction="http://Tipalti.org/GetCustomFields" style="document"/>
+    <wsdl:input>
+        <soap12:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap12:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="GetProviderAccounts">
+    <soap12:operation soapAction="http://Tipalti.org/GetProviderAccounts" style="document"/>
+    <wsdl:input>
+        <soap12:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap12:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="ProcessMultiCurrencyPaymentFile">
+    <soap12:operation soapAction="http://Tipalti.org/ProcessMultiCurrencyPaymentFile" style="document"/>
+    <wsdl:input>
+        <soap12:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap12:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="GetDynamicKeyOfSubPayer">
+    <soap12:operation soapAction="http://Tipalti.org/GetDynamicKeyOfSubPayer" style="document"/>
+    <wsdl:input>
+        <soap12:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap12:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="ProcessPayments">
+    <soap12:operation soapAction="http://Tipalti.org/ProcessPayments" style="document"/>
+    <wsdl:input>
+        <soap12:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap12:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="TestPayments">
+    <soap12:operation soapAction="http://Tipalti.org/TestPayments" style="document"/>
+    <wsdl:input>
+        <soap12:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap12:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="ProcessPaymentsAsync">
+    <soap12:operation soapAction="http://Tipalti.org/ProcessPaymentsAsync" style="document"/>
+    <wsdl:input>
+        <soap12:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap12:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="TestPaymentsAsync">
+    <soap12:operation soapAction="http://Tipalti.org/TestPaymentsAsync" style="document"/>
+    <wsdl:input>
+        <soap12:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap12:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="ProcessPaymentFileAsync">
+    <soap12:operation soapAction="http://Tipalti.org/ProcessPaymentFileAsync" style="document"/>
+    <wsdl:input>
+        <soap12:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap12:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="TestPaymentFileAsync">
+    <soap12:operation soapAction="http://Tipalti.org/TestPaymentFileAsync" style="document"/>
+    <wsdl:input>
+        <soap12:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap12:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="TestMultiCurrencyPaymentFileAsync">
+    <soap12:operation soapAction="http://Tipalti.org/TestMultiCurrencyPaymentFileAsync" style="document"/>
+    <wsdl:input>
+        <soap12:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap12:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="ProcessMultiCurrencyPaymentFileAsync">
+    <soap12:operation soapAction="http://Tipalti.org/ProcessMultiCurrencyPaymentFileAsync" style="document"/>
+    <wsdl:input>
+        <soap12:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap12:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="GetProcessingRequestStatus">
+    <soap12:operation soapAction="http://Tipalti.org/GetProcessingRequestStatus" style="document"/>
+    <wsdl:input>
+        <soap12:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap12:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="ProcessPaymentsAsyncResult">
+    <soap12:operation soapAction="http://Tipalti.org/ProcessPaymentsAsyncResult" style="document"/>
+    <wsdl:input>
+        <soap12:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap12:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="CreateExtendedPayeeStatusFile">
+    <soap12:operation soapAction="http://Tipalti.org/CreateExtendedPayeeStatusFile" style="document"/>
+    <wsdl:input>
+        <soap12:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap12:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="CreatePayeeStatusFile">
+    <soap12:operation soapAction="http://Tipalti.org/CreatePayeeStatusFile" style="document"/>
+    <wsdl:input>
+        <soap12:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap12:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="GetDynamicKey">
+    <soap12:operation soapAction="http://Tipalti.org/GetDynamicKey" style="document"/>
+    <wsdl:input>
+        <soap12:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap12:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="GetBalances">
+    <soap12:operation soapAction="http://Tipalti.org/GetBalances" style="document"/>
+    <wsdl:input>
+        <soap12:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap12:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="GetUpdatedPayments">
+    <soap12:operation soapAction="http://Tipalti.org/GetUpdatedPayments" style="document"/>
+    <wsdl:input>
+        <soap12:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap12:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="GetPayerFees">
+    <soap12:operation soapAction="http://Tipalti.org/GetPayerFees" style="document"/>
+    <wsdl:input>
+        <soap12:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap12:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="CreateOrUpdateInvoices">
+    <soap12:operation soapAction="http://Tipalti.org/CreateOrUpdateInvoices" style="document"/>
+    <wsdl:input>
+        <soap12:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap12:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="GetPayeeInvoicesListDetails">
+    <soap12:operation soapAction="http://Tipalti.org/GetPayeeInvoicesListDetails" style="document"/>
+    <wsdl:input>
+        <soap12:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap12:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="CreateOrUpdateCustomFields">
+    <soap12:operation soapAction="http://Tipalti.org/CreateOrUpdateCustomFields" style="document"/>
+    <wsdl:input>
+        <soap12:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap12:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="LogIntegrationError">
+    <soap12:operation soapAction="http://Tipalti.org/LogIntegrationError" style="document"/>
+    <wsdl:input>
+        <soap12:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap12:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="ApplyVendorCredit">
+    <soap12:operation soapAction="http://Tipalti.org/ApplyVendorCredit" style="document"/>
+    <wsdl:input>
+        <soap12:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap12:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+</wsdl:binding>
+<wsdl:service name="TipaltiPayerSOAP">
+<wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Payer functions.</wsdl:documentation>
+<wsdl:port name="TipaltiPayerSOAPSoap" binding="tns:TipaltiPayerSOAPSoap">
+    <soap:address location="https://api.sandbox.tipalti.com/payerfunctions.asmx"/>
+</wsdl:port>
+<wsdl:port name="TipaltiPayerSOAPSoap12" binding="tns:TipaltiPayerSOAPSoap12">
+    <soap12:address location="https://api.sandbox.tipalti.com/payerfunctions.asmx"/>
+</wsdl:port>
+</wsdl:service>
+        </wsdl:definitions>
