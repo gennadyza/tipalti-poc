@@ -47,7 +47,7 @@
             <plugin>
                 <groupId>org.jvnet.jaxb2.maven2</groupId>
                 <artifactId>maven-jaxb2-plugin</artifactId>
-                <version>0.14.0</version>
+                <version>0.13.3</version>
                 <executions>
                     <execution>
                         <goals>
@@ -57,19 +57,25 @@
                 </executions>
                 <configuration>
                     <schemaLanguage>WSDL</schemaLanguage>
-                    <generatePackage>com.papaya.tipaltipoc.generated</generatePackage>
+                    <!--<generatePackage>com.papaya.tipaltipoc.generated</generatePackage>-->
                     <generateDirectory>${project.basedir}/src/main/java</generateDirectory>
-                   <!-- <schemaDirectory>${project.basedir}/src/main/resources/wsdl</schemaDirectory>
+                  <!--  <schemaDirectory>${project.basedir}/src/main/resources/wsdl</schemaDirectory>
                     <schemaIncludes>
                         <include>*.wsdl</include>
                     </schemaIncludes>-->
+                    <bindingIncludes>
+                   <!--     <includes>*.xsd</includes>
+                        <include>*.xjb</include>-->
+                        <include>*.xjb</include>
+                        <include>*.xsd</include>
+                    </bindingIncludes>
                     <schemas>
                         <schema>
                             <url>https://api.sandbox.tipalti.com/v9/payerfunctions.asmx?wsdl</url>
                         </schema>
-                        <schema>
+                      <!--  <schema>
                             <url>https://api.sandbox.tipalti.com/v9/PayeeFunctions.asmx?wsdl</url>
-                        </schema>
+                        </schema>-->
                     </schemas>
                 </configuration>
             </plugin>

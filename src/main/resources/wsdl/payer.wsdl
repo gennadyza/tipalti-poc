@@ -1,13 +1,14 @@
 <wsdl:definitions xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/"
                   xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
                   xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://Tipalti.org/"
-                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema"
-                  xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s1="V8"
+                  xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
                   xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
                   targetNamespace="http://Tipalti.org/">
     <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Payer functions.</wsdl:documentation>
     <wsdl:types>
         <s:schema elementFormDefault="qualified" targetNamespace="http://Tipalti.org/">
+            <s:import namespace="V8"/>
             <s:element name="CreatePaymentOrdersReport">
                 <s:complexType>
                     <s:sequence>
@@ -738,19 +739,29 @@
             </s:complexType>
             <s:complexType name="TipaltiAccountInfo">
                 <s:sequence>
-                    <s:element minOccurs="1" maxOccurs="1" name="AccountType" type="tns:eAccountType"/>
-                    <s:element minOccurs="0" maxOccurs="1" name="currency" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="Provider" type="tns:ePaymentProviderType"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="AccountIdentifier" type="s:string"/>
                     <s:element minOccurs="1" maxOccurs="1" name="Balance" type="s:double"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Currency" type="s:string"/>
                 </s:sequence>
             </s:complexType>
-            <s:simpleType name="eAccountType">
+            <s:simpleType name="ePaymentProviderType">
                 <s:restriction base="s:string">
-                    <s:enumeration value="Bank"/>
+                    <s:enumeration value="None"/>
+                    <s:enumeration value="Citi_Deprecated"/>
                     <s:enumeration value="PayPal"/>
-                    <s:enumeration value="PrePaidCard"/>
+                    <s:enumeration value="Payoneer"/>
+                    <s:enumeration value="Payer"/>
+                    <s:enumeration value="Tipalti"/>
+                    <s:enumeration value="WellsFargo"/>
+                    <s:enumeration value="Earthport"/>
+                    <s:enumeration value="Skrill"/>
                     <s:enumeration value="EntroPay"/>
                     <s:enumeration value="Intercash"/>
                     <s:enumeration value="AstroPay"/>
+                    <s:enumeration value="Chexx"/>
+                    <s:enumeration value="JPMorgan"/>
+                    <s:enumeration value="Citi"/>
                 </s:restriction>
             </s:simpleType>
             <s:element name="GetUpdatedPayments">
@@ -827,6 +838,9 @@
                     <s:element minOccurs="0" maxOccurs="1" name="FeeCurrency" type="s:string"/>
                     <s:element minOccurs="1" maxOccurs="1" name="FeeAmount" type="s:double"/>
                     <s:element minOccurs="0" maxOccurs="1" name="FeeDescription" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="PayerEntityName" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Provider" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="AccountIdentifier" type="s:string"/>
                 </s:sequence>
             </s:complexType>
             <s:element name="CreateOrUpdateInvoices">
@@ -835,22 +849,23 @@
                         <s:element minOccurs="0" maxOccurs="1" name="payerName" type="s:string"/>
                         <s:element minOccurs="1" maxOccurs="1" name="timestamp" type="s:double"/>
                         <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string"/>
-                        <s:element minOccurs="0" maxOccurs="1" name="invoices" type="tns:ArrayOfTipaltiInvoiceItem"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="invoices"
+                                   type="tns:ArrayOfTipaltiInvoiceItemRequest"/>
                     </s:sequence>
                 </s:complexType>
             </s:element>
-            <s:complexType name="ArrayOfTipaltiInvoiceItem">
+            <s:complexType name="ArrayOfTipaltiInvoiceItemRequest">
                 <s:sequence>
-                    <s:element minOccurs="0" maxOccurs="unbounded" name="TipaltiInvoiceItem" nillable="true"
-                               type="tns:TipaltiInvoiceItem"/>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="TipaltiInvoiceItemRequest" nillable="true"
+                               type="tns:TipaltiInvoiceItemRequest"/>
                 </s:sequence>
             </s:complexType>
-            <s:complexType name="TipaltiInvoiceItem">
+            <s:complexType name="TipaltiInvoiceItemRequest">
                 <s:sequence>
                     <s:element minOccurs="0" maxOccurs="1" name="Idap" type="s:string"/>
                     <s:element minOccurs="0" maxOccurs="1" name="InvoiceRefCode" type="s:string"/>
                     <s:element minOccurs="1" maxOccurs="1" name="InvoiceDate" type="s:dateTime"/>
-                    <s:element minOccurs="1" maxOccurs="1" name="InvoiceDueDate" type="s:dateTime"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="InvoiceDueDate" nillable="true" type="s:dateTime"/>
                     <s:element minOccurs="0" maxOccurs="1" name="InvoiceLines" type="tns:ArrayOfInvoiceLine"/>
                     <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string"/>
                     <s:element minOccurs="1" maxOccurs="1" name="CanApprove" type="s:boolean"/>
@@ -858,6 +873,15 @@
                     <s:element minOccurs="0" maxOccurs="1" name="CustomFields" type="tns:ArrayOfKeyValuePair"/>
                     <s:element minOccurs="1" maxOccurs="1" name="IsPaidManually" type="s:boolean"/>
                     <s:element minOccurs="0" maxOccurs="1" name="IncomeType" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="InvoiceStatus" nillable="true"
+                               type="tns:TipaltiInvoiceStatus"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Currency" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Approvers" type="tns:ArrayOfTipaltiInvoiceApprover"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="InvoiceNumber" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="PayerEntityName" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="InvoiceSubject" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ApAccountNumber" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ApAccountExternalId" type="s:string"/>
                 </s:sequence>
             </s:complexType>
             <s:complexType name="ArrayOfInvoiceLine">
@@ -875,16 +899,112 @@
                     <s:element minOccurs="0" maxOccurs="1" name="EWalletMessage" type="s:string"/>
                     <s:element minOccurs="0" maxOccurs="1" name="BankingMessage" type="s:string"/>
                     <s:element minOccurs="0" maxOccurs="1" name="CustomFields" type="tns:ArrayOfKeyValuePair"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="GLAccount" type="tns:TipaltiGLAccount"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="LineType" nillable="true" type="tns:eInvoiceLineType"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="LineExternalMetadata" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="Quantity" nillable="true" type="s:decimal"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="BillLineID" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="TaxCodeExternalId" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="TaxAmount" nillable="true" type="s:decimal"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="RelatedPurchaseOrders"
+                               type="tns:ArrayOfTipaltiRelatedPurchaseOrder"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="TipaltiGLAccount">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Number" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ExternalId" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="MiscBox1099" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Type" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Currency" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:simpleType name="eInvoiceLineType">
+                <s:restriction base="s:string">
+                    <s:enumeration value="AccountBased"/>
+                    <s:enumeration value="ItemBased"/>
+                </s:restriction>
+            </s:simpleType>
+            <s:complexType name="ArrayOfTipaltiRelatedPurchaseOrder">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="TipaltiRelatedPurchaseOrder" nillable="true"
+                               type="tns:TipaltiRelatedPurchaseOrder"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="TipaltiRelatedPurchaseOrder">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="PurchaseOrderNumber" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ItemNumber" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="Quantity" nillable="true" type="s:decimal"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="Amount" nillable="true" type="s:decimal"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ExternalLineId" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ItemExternalId" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:simpleType name="TipaltiInvoiceStatus">
+                <s:restriction base="s:string">
+                    <s:enumeration value="PendingApReview"/>
+                    <s:enumeration value="PendingApproval"/>
+                    <s:enumeration value="PendingApAction"/>
+                    <s:enumeration value="PendingPayment"/>
+                    <s:enumeration value="SubmittedForPayment"/>
+                    <s:enumeration value="Paid"/>
+                    <s:enumeration value="Disputed"/>
+                    <s:enumeration value="Deleted"/>
+                    <s:enumeration value="PendingPayeeApproval"/>
+                    <s:enumeration value="PendingPayeeInvoice"/>
+                    <s:enumeration value="PartiallyPaid"/>
+                    <s:enumeration value="ScheduledForPayment"/>
+                    <s:enumeration value="ReviewMatching"/>
+                    <s:enumeration value="PendingMatching"/>
+                </s:restriction>
+            </s:simpleType>
+            <s:complexType name="ArrayOfTipaltiInvoiceApprover">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="TipaltiInvoiceApprover" nillable="true"
+                               type="tns:TipaltiInvoiceApprover"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="TipaltiInvoiceApprover">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Email" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="Order" nillable="true" type="s:int"/>
                 </s:sequence>
             </s:complexType>
             <s:element name="CreateOrUpdateInvoicesResponse">
                 <s:complexType>
                     <s:sequence>
                         <s:element minOccurs="0" maxOccurs="1" name="CreateOrUpdateInvoicesResult"
-                                   type="tns:TipaltiResponse"/>
+                                   type="tns:CreateOrUpdateInvoiceResult"/>
                     </s:sequence>
                 </s:complexType>
             </s:element>
+            <s:complexType name="CreateOrUpdateInvoiceResult">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:TipaltiResponse">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="InvoiceErrors"
+                                       type="tns:ArrayOfTipaltiInvoiceItemResult"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="ArrayOfTipaltiInvoiceItemResult">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="TipaltiInvoiceItemResult" nillable="true"
+                               type="tns:TipaltiInvoiceItemResult"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="TipaltiInvoiceItemResult">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="ErrorMessage" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="Succeeded" type="s:boolean"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="InvoiceRefCode" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
             <s:element name="GetPayeeInvoicesListDetails">
                 <s:complexType>
                     <s:sequence>
@@ -910,7 +1030,7 @@
                             <s:element minOccurs="0" maxOccurs="1" name="InvoiceErrors"
                                        type="tns:ArrayOfTipaltiInvoiceItemError"/>
                             <s:element minOccurs="0" maxOccurs="1" name="Invoices"
-                                       type="tns:ArrayOfTipaltiInvoiceItem"/>
+                                       type="tns:ArrayOfTipaltiInvoiceItemResponse"/>
                         </s:sequence>
                     </s:extension>
                 </s:complexContent>
@@ -928,6 +1048,93 @@
                     <s:element minOccurs="0" maxOccurs="1" name="InvoiceRefCode" type="s:string"/>
                 </s:sequence>
             </s:complexType>
+            <s:complexType name="ArrayOfTipaltiInvoiceItemResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="TipaltiInvoiceItemResponse" nillable="true"
+                               type="tns:TipaltiInvoiceItemResponse"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="TipaltiInvoiceItemResponse">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="Idap" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="InvoiceRefCode" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="InvoiceDate" type="s:dateTime"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="InvoiceDueDate" type="s:dateTime"/>
+                    <s:element minOccurs="0" maxOccurs="unbounded" ref="s1:InvoiceLines"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="CanApprove" type="s:boolean"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="InvoiceInternalNotes" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="CustomFields" type="tns:ArrayOfKeyValuePair"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="IsPaidManually" type="s:boolean"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="IncomeType" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="InvoiceStatus" nillable="true"
+                               type="tns:TipaltiInvoiceStatus"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Currency" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Approvers" type="tns:ArrayOfTipaltiInvoiceApprover"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="InvoiceNumber" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="ApprovalDate" type="s:dateTime"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="PayerEntityName" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="AmountDue" nillable="true" type="s:double"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="VendorCredits" type="tns:ArrayOfTipaltiVendorCredit"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="APAccount" type="tns:TipaltiGLAccount"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="PurchaseOrderMatchingCompleted" type="s:boolean"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="HasInvoiceFile" type="s:boolean"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="IsInvoiceFileDeleted" type="s:boolean"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ArrayOfTipaltiVendorCredit">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="TipaltiVendorCredit" nillable="true"
+                               type="tns:TipaltiVendorCredit"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="TipaltiVendorCredit">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="RefCode" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="AppliedAmount" type="s:double"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="CreateOrUpdateGLAccounts">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="payerName" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="timestamp" type="s:double"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="glAccounts"
+                                   type="tns:ArrayOfUpdateGLAccountRequest"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="ArrayOfUpdateGLAccountRequest">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="UpdateGLAccountRequest" nillable="true"
+                               type="tns:UpdateGLAccountRequest"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="UpdateGLAccountRequest">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:TipaltiGLAccount">
+                        <s:sequence>
+                            <s:element minOccurs="1" maxOccurs="1" name="Action" type="tns:TipaltiGlAccountAction"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="PayerEntities" type="tns:ArrayOfString"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:simpleType name="TipaltiGlAccountAction">
+                <s:restriction base="s:string">
+                    <s:enumeration value="Update"/>
+                    <s:enumeration value="Close"/>
+                </s:restriction>
+            </s:simpleType>
+            <s:element name="CreateOrUpdateGLAccountsResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="CreateOrUpdateGLAccountsResult"
+                                   type="tns:TipaltiResponse"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
             <s:element name="CreateOrUpdateCustomFields">
                 <s:complexType>
                     <s:sequence>
@@ -1060,6 +1267,191 @@
                     </s:sequence>
                 </s:complexType>
             </s:element>
+            <s:element name="CreateOrUpdateGrns">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="payerName" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="timestamp" type="s:double"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="grns" type="tns:ArrayOfTipaltiGrnItem"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="ArrayOfTipaltiGrnItem">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="TipaltiGrnItem" nillable="true"
+                               type="tns:TipaltiGrnItem"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="TipaltiGrnItem">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="ReceiptNumber" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="Status" type="tns:eUploadCenterRecordStatus"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="ReceiptDate" type="s:dateTime"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="PayerEntity" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Supplier" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="ShipmentDate" type="s:dateTime"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Notes" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ReceiptBy" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="PurchaseOrderNumber" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="GrnLines"
+                               type="tns:ArrayOfGoodsReceivedNotificationLine"/>
+                </s:sequence>
+            </s:complexType>
+            <s:simpleType name="eUploadCenterRecordStatus">
+                <s:restriction base="s:string">
+                    <s:enumeration value="Active"/>
+                    <s:enumeration value="Closed"/>
+                    <s:enumeration value="Deleted"/>
+                    <s:enumeration value="PartiallyBilled"/>
+                    <s:enumeration value="PendingApproval"/>
+                </s:restriction>
+            </s:simpleType>
+            <s:complexType name="ArrayOfGoodsReceivedNotificationLine">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="GoodsReceivedNotificationLine" nillable="true"
+                               type="tns:GoodsReceivedNotificationLine"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="GoodsReceivedNotificationLine">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="InvoiceNumber" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ItemCode" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ItemDescription" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ItemUnits" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="QuantityShipped" nillable="true" type="s:decimal"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="LineNotes" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="PoLineId" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="CreateOrUpdateGrnsResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="CreateOrUpdateGrnsResult"
+                                   type="tns:CreateOrUpdateGrnResult"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="CreateOrUpdateGrnResult">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:TipaltiResponse">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="GrnErrors"
+                                       type="tns:ArrayOfTipaltiGrnItemResult"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="ArrayOfTipaltiGrnItemResult">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="TipaltiGrnItemResult" nillable="true"
+                               type="tns:TipaltiGrnItemResult"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="TipaltiGrnItemResult">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="ErrorMessage" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="Succeeded" type="s:boolean"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ReceiptNumber" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="CreateOrUpdatePurchaseOrders">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="payerName" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="timestamp" type="s:double"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="purchaseOrders"
+                                   type="tns:ArrayOfTipaltiPurchaseOrderItem"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="ArrayOfTipaltiPurchaseOrderItem">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="TipaltiPurchaseOrderItem" nillable="true"
+                               type="tns:TipaltiPurchaseOrderItem"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="TipaltiPurchaseOrderItem">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="Idap" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="PurchaseOrderNumber" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="Status" type="tns:eUploadCenterRecordStatus"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Memo" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="PurchaseOrderDate" type="s:dateTime"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="PayerEntity" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Currency" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Approvers" type="tns:ArrayOfTipaltiInvoiceApprover"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="CustomFields" type="tns:ArrayOfKeyValuePair"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="PurchaseOrderLines"
+                               type="tns:ArrayOfPurchaseOrderLine"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ArrayOfPurchaseOrderLine">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="PurchaseOrderLine" nillable="true"
+                               type="tns:PurchaseOrderLine"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="PurchaseOrderLine">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="Item" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="Quantity" nillable="true" type="s:decimal"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Units" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="LineDescription" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="Rate" nillable="true" type="s:decimal"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="Amount" nillable="true" type="s:decimal"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="DiscountValue" nillable="true" type="s:decimal"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="NetValue" nillable="true" type="s:decimal"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Account" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="TaxAmount" nillable="true" type="s:decimal"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="CustomFields" type="tns:ArrayOfKeyValuePair"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="PoLineId" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="LineType" nillable="true" type="tns:eLineType"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="BilledQuantity" nillable="true" type="s:decimal"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="BilledAmount" nillable="true" type="s:decimal"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="AccountExternalId" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ItemExternalId" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="IsClosed" type="s:boolean"/>
+                </s:sequence>
+            </s:complexType>
+            <s:simpleType name="eLineType">
+                <s:restriction base="s:string">
+                    <s:enumeration value="Item"/>
+                    <s:enumeration value="Expense"/>
+                </s:restriction>
+            </s:simpleType>
+            <s:element name="CreateOrUpdatePurchaseOrdersResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="CreateOrUpdatePurchaseOrdersResult"
+                                   type="tns:CreateOrUpdatePurchaseOrderResult"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="CreateOrUpdatePurchaseOrderResult">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:TipaltiResponse">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="PurchaseOrderErrors"
+                                       type="tns:ArrayOfTipaltiPurchaseOrderItemResult"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="ArrayOfTipaltiPurchaseOrderItemResult">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="TipaltiPurchaseOrderItemResult" nillable="true"
+                               type="tns:TipaltiPurchaseOrderItemResult"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="TipaltiPurchaseOrderItemResult">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="ErrorMessage" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="Succeeded" type="s:boolean"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="PurchaseOrderNumber" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
             <s:element name="ApplyVendorCredit">
                 <s:complexType>
                     <s:sequence>
@@ -1114,6 +1506,259 @@
                     <s:element minOccurs="0" maxOccurs="1" name="ErrorMessage" type="s:string"/>
                     <s:element minOccurs="1" maxOccurs="1" name="Succeeded" type="s:boolean"/>
                     <s:element minOccurs="0" maxOccurs="1" name="InvoiceRefCode" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="CreateOrUpdatePaymentTerms">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="payerName" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="timestamp" type="s:double"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="paymentTerms"
+                                   type="tns:ArrayOfTipaltiPaymentTerm"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="ArrayOfTipaltiPaymentTerm">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="TipaltiPaymentTerm" nillable="true"
+                               type="tns:TipaltiPaymentTerm"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="TipaltiPaymentTerm">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="ExternalId" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="Term" type="s:int"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="IsDefault" type="s:boolean"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="CreateOrUpdatePaymentTermsResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="CreateOrUpdatePaymentTermsResult"
+                                   type="tns:CreateOrUpdatePaymentTermsResult"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="CreateOrUpdatePaymentTermsResult">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:TipaltiResponse">
+                        <s:sequence>
+                            <s:element minOccurs="1" maxOccurs="1" name="CreatedCount" type="s:int"/>
+                            <s:element minOccurs="1" maxOccurs="1" name="UpdatedCount" type="s:int"/>
+                            <s:element minOccurs="0" maxOccurs="1" name="PaymentTerms"
+                                       type="tns:ArrayOfTipaltiPaymentTerm"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:element name="DeletePaymentTerms">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="payerName" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="timestamp" type="s:double"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="paymentTerms"
+                                   type="tns:ArrayOfTipaltiPaymentTerm"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="DeletePaymentTermsResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="DeletePaymentTermsResult"
+                                   type="tns:DeletePaymentTermsResult"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="DeletePaymentTermsResult">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:TipaltiResponse">
+                        <s:sequence>
+                            <s:element minOccurs="1" maxOccurs="1" name="DeletedCount" type="s:int"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:element name="GetPaymentTerms">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="payerName" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="timestamp" type="s:double"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="GetPaymentTermsResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="GetPaymentTermsResult"
+                                   type="tns:GetPaymentTermsResult"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="GetPaymentTermsResult">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:TipaltiResponse">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="PaymentTerms"
+                                       type="tns:ArrayOfTipaltiPaymentTerm"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:element name="CreateOrUpdateTaxCodes">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="payerName" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="timestamp" type="s:double"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="taxCodes" type="tns:ArrayOfTipaltiTaxCode"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="ArrayOfTipaltiTaxCode">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="TipaltiTaxCode" nillable="true"
+                               type="tns:TipaltiTaxCode"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="TipaltiTaxCode">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="ExternalId" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="Active" type="s:boolean"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="Rate" nillable="true" type="s:decimal"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="PayerEntities" type="tns:ArrayOfString"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="CreateOrUpdateTaxCodesResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="CreateOrUpdateTaxCodesResult"
+                                   type="tns:CreateOrUpdateTaxCodesResult"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="CreateOrUpdateTaxCodesResult">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:TipaltiResponse">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="TaxCodes" type="tns:ArrayOfTipaltiTaxCode"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:element name="GetPayerEntities">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="payerName" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="timestamp" type="s:double"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="GetPayerEntitiesResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="GetPayerEntitiesResult"
+                                   type="tns:GetPayerEntitiesResult"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="GetPayerEntitiesResult">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:TipaltiResponse">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="PayerEntities"
+                                       type="tns:ArrayOfPayerEntityInfo"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="ArrayOfPayerEntityInfo">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="PayerEntityInfo" nillable="true"
+                               type="tns:PayerEntityInfo"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="PayerEntityInfo">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="EntityName" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="LegalName" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="IsDefault" type="s:boolean"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="BrandName" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+        </s:schema>
+        <s:schema elementFormDefault="qualified" targetNamespace="V8">
+            <s:element name="InvoiceLines" type="s1:InvoiceLine"/>
+            <s:complexType name="InvoiceLine">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="Currency" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="Amount" type="s:double"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="InvoiceInternalNotes" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="EWalletMessage" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="BankingMessage" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="CustomFields" type="s1:ArrayOfKeyValuePair"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="GLAccount" type="s1:TipaltiGLAccount"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="LineType" nillable="true" type="s1:eInvoiceLineType"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="LineExternalMetadata" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="Quantity" nillable="true" type="s:decimal"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="BillLineID" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="TaxCodeExternalId" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="TaxRate" nillable="true" type="s:decimal"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="TaxAmount" nillable="true" type="s:decimal"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="Total" nillable="true" type="s:decimal"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="RelatedPurchaseOrders"
+                               type="s1:ArrayOfTipaltiRelatedPurchaseOrder"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="ArrayOfKeyValuePair">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="KeyValuePair" nillable="true"
+                               type="s1:KeyValuePair"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="KeyValuePair">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="Key" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Value" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="TipaltiGLAccount">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Number" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ExternalId" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="MiscBox1099" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Type" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Currency" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:simpleType name="eInvoiceLineType">
+                <s:restriction base="s:string">
+                    <s:enumeration value="AccountBased"/>
+                    <s:enumeration value="ItemBased"/>
+                </s:restriction>
+            </s:simpleType>
+            <s:complexType name="ArrayOfTipaltiRelatedPurchaseOrder">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="TipaltiRelatedPurchaseOrder" nillable="true"
+                               type="s1:TipaltiRelatedPurchaseOrder"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="TipaltiRelatedPurchaseOrder">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="PurchaseOrderNumber" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ItemNumber" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="Quantity" nillable="true" type="s:decimal"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="Amount" nillable="true" type="s:decimal"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ExternalLineId" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="ItemExternalId" type="s:string"/>
                 </s:sequence>
             </s:complexType>
         </s:schema>
@@ -1274,6 +1919,12 @@
     <wsdl:message name="GetPayeeInvoicesListDetailsSoapOut">
         <wsdl:part name="parameters" element="tns:GetPayeeInvoicesListDetailsResponse"/>
     </wsdl:message>
+    <wsdl:message name="CreateOrUpdateGLAccountsSoapIn">
+        <wsdl:part name="parameters" element="tns:CreateOrUpdateGLAccounts"/>
+    </wsdl:message>
+    <wsdl:message name="CreateOrUpdateGLAccountsSoapOut">
+        <wsdl:part name="parameters" element="tns:CreateOrUpdateGLAccountsResponse"/>
+    </wsdl:message>
     <wsdl:message name="CreateOrUpdateCustomFieldsSoapIn">
         <wsdl:part name="parameters" element="tns:CreateOrUpdateCustomFields"/>
     </wsdl:message>
@@ -1286,13 +1937,55 @@
     <wsdl:message name="LogIntegrationErrorSoapOut">
         <wsdl:part name="parameters" element="tns:LogIntegrationErrorResponse"/>
     </wsdl:message>
+    <wsdl:message name="CreateOrUpdateGrnsSoapIn">
+        <wsdl:part name="parameters" element="tns:CreateOrUpdateGrns"/>
+    </wsdl:message>
+    <wsdl:message name="CreateOrUpdateGrnsSoapOut">
+        <wsdl:part name="parameters" element="tns:CreateOrUpdateGrnsResponse"/>
+    </wsdl:message>
+    <wsdl:message name="CreateOrUpdatePurchaseOrdersSoapIn">
+        <wsdl:part name="parameters" element="tns:CreateOrUpdatePurchaseOrders"/>
+    </wsdl:message>
+    <wsdl:message name="CreateOrUpdatePurchaseOrdersSoapOut">
+        <wsdl:part name="parameters" element="tns:CreateOrUpdatePurchaseOrdersResponse"/>
+    </wsdl:message>
     <wsdl:message name="ApplyVendorCreditSoapIn">
         <wsdl:part name="parameters" element="tns:ApplyVendorCredit"/>
     </wsdl:message>
     <wsdl:message name="ApplyVendorCreditSoapOut">
         <wsdl:part name="parameters" element="tns:ApplyVendorCreditResponse"/>
     </wsdl:message>
-    <wsdl:portType name="TipaltiPayerSOAPSoap">
+    <wsdl:message name="CreateOrUpdatePaymentTermsSoapIn">
+        <wsdl:part name="parameters" element="tns:CreateOrUpdatePaymentTerms"/>
+    </wsdl:message>
+    <wsdl:message name="CreateOrUpdatePaymentTermsSoapOut">
+        <wsdl:part name="parameters" element="tns:CreateOrUpdatePaymentTermsResponse"/>
+    </wsdl:message>
+    <wsdl:message name="DeletePaymentTermsSoapIn">
+        <wsdl:part name="parameters" element="tns:DeletePaymentTerms"/>
+    </wsdl:message>
+    <wsdl:message name="DeletePaymentTermsSoapOut">
+        <wsdl:part name="parameters" element="tns:DeletePaymentTermsResponse"/>
+    </wsdl:message>
+    <wsdl:message name="GetPaymentTermsSoapIn">
+        <wsdl:part name="parameters" element="tns:GetPaymentTerms"/>
+    </wsdl:message>
+    <wsdl:message name="GetPaymentTermsSoapOut">
+        <wsdl:part name="parameters" element="tns:GetPaymentTermsResponse"/>
+    </wsdl:message>
+    <wsdl:message name="CreateOrUpdateTaxCodesSoapIn">
+        <wsdl:part name="parameters" element="tns:CreateOrUpdateTaxCodes"/>
+    </wsdl:message>
+    <wsdl:message name="CreateOrUpdateTaxCodesSoapOut">
+        <wsdl:part name="parameters" element="tns:CreateOrUpdateTaxCodesResponse"/>
+    </wsdl:message>
+    <wsdl:message name="GetPayerEntitiesSoapIn">
+        <wsdl:part name="parameters" element="tns:GetPayerEntities"/>
+    </wsdl:message>
+    <wsdl:message name="GetPayerEntitiesSoapOut">
+        <wsdl:part name="parameters" element="tns:GetPayerEntitiesResponse"/>
+    </wsdl:message>
+    <wsdl:portType name="TipaltiPayerSOAPV9Soap">
         <wsdl:operation name="CreatePaymentOrdersReport">
             <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
                 Create payment orders report. Return value is the report file name that is written to the SFTP
@@ -1492,8 +2185,8 @@
 </wsdl:operation>
 <wsdl:operation name="GetBalances">
 <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-    Get balances in your accounts. Returns account type, currency and amout in balance.<br/>Note: when submitting a
-    payment, the balance may take some time before it is updated<br/>EAT - none
+    Get balances in your accounts. Returns account provider, account identifier, currency and amount in balance.<br/>
+    Note: when submitting a payment, the balance may take some time before it is updated<br/>EAT - none
 </wsdl:documentation>
 <wsdl:input message="tns:GetBalancesSoapIn"/>
 <wsdl:output message="tns:GetBalancesSoapOut"/>
@@ -1525,6 +2218,16 @@
 <wsdl:input message="tns:GetPayeeInvoicesListDetailsSoapIn"/>
 <wsdl:output message="tns:GetPayeeInvoicesListDetailsSoapOut"/>
 </wsdl:operation>
+<wsdl:operation name="CreateOrUpdateGLAccounts">
+<wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    Creates, updates or closes G/L accounts.<br/>If G/L Account does not exist, it will be created.
+    <br/>
+    If G/L Account is closed, it will be updated and reactivated.<br/>If G/L account is assigned to outstanding unpaid
+    bill(s), Close action will be rejected.
+</wsdl:documentation>
+<wsdl:input message="tns:CreateOrUpdateGLAccountsSoapIn"/>
+<wsdl:output message="tns:CreateOrUpdateGLAccountsSoapOut"/>
+</wsdl:operation>
 <wsdl:operation name="CreateOrUpdateCustomFields">
 <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
     Create update or delete custom fields. Custom fields type can be created as: .<br/>1. Free text - the user can enter
@@ -1542,14 +2245,53 @@
 <wsdl:input message="tns:LogIntegrationErrorSoapIn"/>
 <wsdl:output message="tns:LogIntegrationErrorSoapOut"/>
 </wsdl:operation>
+<wsdl:operation name="CreateOrUpdateGrns">
+<wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    Create new goods recieved notifications or update existing ones.<br/>EAT - null
+</wsdl:documentation>
+<wsdl:input message="tns:CreateOrUpdateGrnsSoapIn"/>
+<wsdl:output message="tns:CreateOrUpdateGrnsSoapOut"/>
+</wsdl:operation>
+<wsdl:operation name="CreateOrUpdatePurchaseOrders">
+<wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    Create new purchase orders or update existing ones.<br/>EAT - null
+</wsdl:documentation>
+<wsdl:input message="tns:CreateOrUpdatePurchaseOrdersSoapIn"/>
+<wsdl:output message="tns:CreateOrUpdatePurchaseOrdersSoapOut"/>
+</wsdl:operation>
 <wsdl:operation name="ApplyVendorCredit">
 <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Applies vendor credit for related bills
 </wsdl:documentation>
 <wsdl:input message="tns:ApplyVendorCreditSoapIn"/>
 <wsdl:output message="tns:ApplyVendorCreditSoapOut"/>
 </wsdl:operation>
+<wsdl:operation name="CreateOrUpdatePaymentTerms">
+<wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Create or update payment terms</wsdl:documentation>
+<wsdl:input message="tns:CreateOrUpdatePaymentTermsSoapIn"/>
+<wsdl:output message="tns:CreateOrUpdatePaymentTermsSoapOut"/>
+</wsdl:operation>
+<wsdl:operation name="DeletePaymentTerms">
+<wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Delete payment terms</wsdl:documentation>
+<wsdl:input message="tns:DeletePaymentTermsSoapIn"/>
+<wsdl:output message="tns:DeletePaymentTermsSoapOut"/>
+</wsdl:operation>
+<wsdl:operation name="GetPaymentTerms">
+<wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Gets all the payer payment terms</wsdl:documentation>
+<wsdl:input message="tns:GetPaymentTermsSoapIn"/>
+<wsdl:output message="tns:GetPaymentTermsSoapOut"/>
+</wsdl:operation>
+<wsdl:operation name="CreateOrUpdateTaxCodes">
+<wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Create or update tax codes</wsdl:documentation>
+<wsdl:input message="tns:CreateOrUpdateTaxCodesSoapIn"/>
+<wsdl:output message="tns:CreateOrUpdateTaxCodesSoapOut"/>
+</wsdl:operation>
+<wsdl:operation name="GetPayerEntities">
+<wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Gets all the payer entities</wsdl:documentation>
+<wsdl:input message="tns:GetPayerEntitiesSoapIn"/>
+<wsdl:output message="tns:GetPayerEntitiesSoapOut"/>
+</wsdl:operation>
         </wsdl:portType>
-<wsdl:binding name="TipaltiPayerSOAPSoap" type="tns:TipaltiPayerSOAPSoap">
+<wsdl:binding name="TipaltiPayerSOAPV9Soap" type="tns:TipaltiPayerSOAPV9Soap">
 <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
 <wsdl:operation name="CreatePaymentOrdersReport">
     <soap:operation soapAction="http://Tipalti.org/CreatePaymentOrdersReport" style="document"/>
@@ -1785,6 +2527,15 @@
         <soap:body use="literal"/>
     </wsdl:output>
 </wsdl:operation>
+<wsdl:operation name="CreateOrUpdateGLAccounts">
+    <soap:operation soapAction="http://Tipalti.org/CreateOrUpdateGLAccounts" style="document"/>
+    <wsdl:input>
+        <soap:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
 <wsdl:operation name="CreateOrUpdateCustomFields">
     <soap:operation soapAction="http://Tipalti.org/CreateOrUpdateCustomFields" style="document"/>
     <wsdl:input>
@@ -1803,6 +2554,24 @@
         <soap:body use="literal"/>
     </wsdl:output>
 </wsdl:operation>
+<wsdl:operation name="CreateOrUpdateGrns">
+    <soap:operation soapAction="http://Tipalti.org/CreateOrUpdateGrns" style="document"/>
+    <wsdl:input>
+        <soap:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="CreateOrUpdatePurchaseOrders">
+    <soap:operation soapAction="http://Tipalti.org/CreateOrUpdatePurchaseOrders" style="document"/>
+    <wsdl:input>
+        <soap:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
 <wsdl:operation name="ApplyVendorCredit">
     <soap:operation soapAction="http://Tipalti.org/ApplyVendorCredit" style="document"/>
     <wsdl:input>
@@ -1812,8 +2581,53 @@
         <soap:body use="literal"/>
     </wsdl:output>
 </wsdl:operation>
+<wsdl:operation name="CreateOrUpdatePaymentTerms">
+    <soap:operation soapAction="http://Tipalti.org/CreateOrUpdatePaymentTerms" style="document"/>
+    <wsdl:input>
+        <soap:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="DeletePaymentTerms">
+    <soap:operation soapAction="http://Tipalti.org/DeletePaymentTerms" style="document"/>
+    <wsdl:input>
+        <soap:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="GetPaymentTerms">
+    <soap:operation soapAction="http://Tipalti.org/GetPaymentTerms" style="document"/>
+    <wsdl:input>
+        <soap:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="CreateOrUpdateTaxCodes">
+    <soap:operation soapAction="http://Tipalti.org/CreateOrUpdateTaxCodes" style="document"/>
+    <wsdl:input>
+        <soap:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="GetPayerEntities">
+    <soap:operation soapAction="http://Tipalti.org/GetPayerEntities" style="document"/>
+    <wsdl:input>
+        <soap:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
 </wsdl:binding>
-<wsdl:binding name="TipaltiPayerSOAPSoap12" type="tns:TipaltiPayerSOAPSoap">
+<wsdl:binding name="TipaltiPayerSOAPV9Soap12" type="tns:TipaltiPayerSOAPV9Soap">
 <soap12:binding transport="http://schemas.xmlsoap.org/soap/http"/>
 <wsdl:operation name="CreatePaymentOrdersReport">
     <soap12:operation soapAction="http://Tipalti.org/CreatePaymentOrdersReport" style="document"/>
@@ -2049,6 +2863,15 @@
         <soap12:body use="literal"/>
     </wsdl:output>
 </wsdl:operation>
+<wsdl:operation name="CreateOrUpdateGLAccounts">
+    <soap12:operation soapAction="http://Tipalti.org/CreateOrUpdateGLAccounts" style="document"/>
+    <wsdl:input>
+        <soap12:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap12:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
 <wsdl:operation name="CreateOrUpdateCustomFields">
     <soap12:operation soapAction="http://Tipalti.org/CreateOrUpdateCustomFields" style="document"/>
     <wsdl:input>
@@ -2067,6 +2890,24 @@
         <soap12:body use="literal"/>
     </wsdl:output>
 </wsdl:operation>
+<wsdl:operation name="CreateOrUpdateGrns">
+    <soap12:operation soapAction="http://Tipalti.org/CreateOrUpdateGrns" style="document"/>
+    <wsdl:input>
+        <soap12:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap12:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="CreateOrUpdatePurchaseOrders">
+    <soap12:operation soapAction="http://Tipalti.org/CreateOrUpdatePurchaseOrders" style="document"/>
+    <wsdl:input>
+        <soap12:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap12:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
 <wsdl:operation name="ApplyVendorCredit">
     <soap12:operation soapAction="http://Tipalti.org/ApplyVendorCredit" style="document"/>
     <wsdl:input>
@@ -2076,14 +2917,59 @@
         <soap12:body use="literal"/>
     </wsdl:output>
 </wsdl:operation>
+<wsdl:operation name="CreateOrUpdatePaymentTerms">
+    <soap12:operation soapAction="http://Tipalti.org/CreateOrUpdatePaymentTerms" style="document"/>
+    <wsdl:input>
+        <soap12:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap12:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="DeletePaymentTerms">
+    <soap12:operation soapAction="http://Tipalti.org/DeletePaymentTerms" style="document"/>
+    <wsdl:input>
+        <soap12:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap12:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="GetPaymentTerms">
+    <soap12:operation soapAction="http://Tipalti.org/GetPaymentTerms" style="document"/>
+    <wsdl:input>
+        <soap12:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap12:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="CreateOrUpdateTaxCodes">
+    <soap12:operation soapAction="http://Tipalti.org/CreateOrUpdateTaxCodes" style="document"/>
+    <wsdl:input>
+        <soap12:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap12:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
+<wsdl:operation name="GetPayerEntities">
+    <soap12:operation soapAction="http://Tipalti.org/GetPayerEntities" style="document"/>
+    <wsdl:input>
+        <soap12:body use="literal"/>
+    </wsdl:input>
+    <wsdl:output>
+        <soap12:body use="literal"/>
+    </wsdl:output>
+</wsdl:operation>
 </wsdl:binding>
-<wsdl:service name="TipaltiPayerSOAP">
+<wsdl:service name="TipaltiPayerSOAPV9">
 <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Payer functions.</wsdl:documentation>
-<wsdl:port name="TipaltiPayerSOAPSoap" binding="tns:TipaltiPayerSOAPSoap">
-    <soap:address location="https://api.sandbox.tipalti.com/payerfunctions.asmx"/>
+<wsdl:port name="TipaltiPayerSOAPV9Soap" binding="tns:TipaltiPayerSOAPV9Soap">
+    <soap:address location="https://api.sandbox.tipalti.com/v9/payerfunctions.asmx"/>
 </wsdl:port>
-<wsdl:port name="TipaltiPayerSOAPSoap12" binding="tns:TipaltiPayerSOAPSoap12">
-    <soap12:address location="https://api.sandbox.tipalti.com/payerfunctions.asmx"/>
+<wsdl:port name="TipaltiPayerSOAPV9Soap12" binding="tns:TipaltiPayerSOAPV9Soap12">
+    <soap12:address location="https://api.sandbox.tipalti.com/v9/payerfunctions.asmx"/>
 </wsdl:port>
 </wsdl:service>
         </wsdl:definitions>
