@@ -44,8 +44,6 @@
 
     <build>
         <plugins>
-
-
             <plugin>
                 <groupId>org.jvnet.jaxb2.maven2</groupId>
                 <artifactId>maven-jaxb2-plugin</artifactId>
@@ -61,15 +59,15 @@
                     <schemaLanguage>WSDL</schemaLanguage>
                     <generatePackage>com.papaya.tipaltipoc.generated</generatePackage>
                     <generateDirectory>${project.basedir}/src/main/java</generateDirectory>
-                    <schemaDirectory>${project.basedir}/src/main/resources/wsdl</schemaDirectory>
+                   <!-- <schemaDirectory>${project.basedir}/src/main/resources/wsdl</schemaDirectory>
                     <schemaIncludes>
                         <include>*.wsdl</include>
-                    </schemaIncludes>
-                    <!--<schemas>
+                    </schemaIncludes>-->
+                    <schemas>
                         <schema>
-                            <url>http://wsf.cdyne.com/WeatherWS/Weather.asmx?wsdl</url>
+                            <url>https://api.sandbox.tipalti.com/payerfunctions.asmx?wsdl</url>
                         </schema>
-                    </schemas>-->
+                    </schemas>
                 </configuration>
             </plugin>
             <plugin>
