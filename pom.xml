@@ -47,25 +47,62 @@
             <plugin>
                 <groupId>org.jvnet.jaxb2.maven2</groupId>
                 <artifactId>maven-jaxb2-plugin</artifactId>
-                <version>0.13.3</version>
+                <version>0.14.0</version>
                 <executions>
                     <execution>
+                        <id>payer</id>
+                        <phase>generate-sources</phase>
                         <goals>
                             <goal>generate</goal>
                         </goals>
+                        <configuration>
+                            <schemaLanguage>WSDL</schemaLanguage>
+                           <!-- <generatePackage>com.papaya.tipaltipoc.generated.payer</generatePackage>-->
+                            <generateDirectory>${project.basedir}/src/main/java/com/papaya/tipaltipoc/generated/payer</generateDirectory>
+                            <bindingIncludes>
+                                <include>*.xjb</include>
+                                <include>*.xsd</include>
+                            </bindingIncludes>
+                            <schemas>
+                                <schema>
+                                    <url>https://api.sandbox.tipalti.com/v9/payerfunctions.asmx?wsdl</url>
+                                </schema>
+                            </schemas>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>payee</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <schemaLanguage>WSDL</schemaLanguage>
+                            <!--<generatePackage>com.papaya.tipaltipoc.generated.payee</generatePackage>-->
+                            <generateDirectory>${project.basedir}/src/main/java/com/papaya/tipaltipoc/generated/payee</generateDirectory>
+                            <bindingIncludes>
+                                <include>*.xjb</include>
+                                <include>*.xsd</include>
+                            </bindingIncludes>
+                            <schemas>
+                                <schema>
+                                    <url>https://api.sandbox.tipalti.com/v9/PayeeFunctions.asmx?wsdl</url>
+                                </schema>
+                            </schemas>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
+          <!--      <configuration>
                     <schemaLanguage>WSDL</schemaLanguage>
-                    <!--<generatePackage>com.papaya.tipaltipoc.generated</generatePackage>-->
+                    &lt;!&ndash;<generatePackage>com.papaya.tipaltipoc.generated</generatePackage>&ndash;&gt;
                     <generateDirectory>${project.basedir}/src/main/java</generateDirectory>
-                  <!--  <schemaDirectory>${project.basedir}/src/main/resources/wsdl</schemaDirectory>
+                  &lt;!&ndash;  <schemaDirectory>${project.basedir}/src/main/resources/wsdl</schemaDirectory>
                     <schemaIncludes>
                         <include>*.wsdl</include>
-                    </schemaIncludes>-->
+                    </schemaIncludes>&ndash;&gt;
                     <bindingIncludes>
-                   <!--     <includes>*.xsd</includes>
-                        <include>*.xjb</include>-->
+                   &lt;!&ndash;     <includes>*.xsd</includes>
+                        <include>*.xjb</include>&ndash;&gt;
                         <include>*.xjb</include>
                         <include>*.xsd</include>
                     </bindingIncludes>
@@ -73,11 +110,11 @@
                         <schema>
                             <url>https://api.sandbox.tipalti.com/v9/payerfunctions.asmx?wsdl</url>
                         </schema>
-                      <!--  <schema>
+                      &lt;!&ndash;  <schema>
                             <url>https://api.sandbox.tipalti.com/v9/PayeeFunctions.asmx?wsdl</url>
-                        </schema>-->
+                        </schema>&ndash;&gt;
                     </schemas>
-                </configuration>
+                </configuration>-->
             </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
