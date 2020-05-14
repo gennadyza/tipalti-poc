@@ -57,12 +57,16 @@
                         </goals>
                         <configuration>
                             <schemaLanguage>WSDL</schemaLanguage>
-                           <!-- <generatePackage>com.papaya.tipaltipoc.generated.payer</generatePackage>-->
-                            <generateDirectory>${project.basedir}/src/main/java/com/papaya/tipaltipoc/generated/payer</generateDirectory>
+                            <generatePackage>com.papaya.tipaltipoc.generated.payer</generatePackage>
+                            <!--<generateDirectory>${project.basedir}/src/main/java/com/papaya/tipaltipoc/generated/payer</generateDirectory>-->
+                            <generateDirectory>${project.basedir}/src/main/java</generateDirectory>
                             <bindingIncludes>
                                 <include>*.xjb</include>
                                 <include>*.xsd</include>
                             </bindingIncludes>
+                            <args>
+                                <arg>-XautoNameResolution</arg>
+                            </args>
                             <schemas>
                                 <schema>
                                     <url>https://api.sandbox.tipalti.com/v9/payerfunctions.asmx?wsdl</url>
@@ -78,16 +82,26 @@
                         </goals>
                         <configuration>
                             <schemaLanguage>WSDL</schemaLanguage>
-                            <!--<generatePackage>com.papaya.tipaltipoc.generated.payee</generatePackage>-->
-                            <generateDirectory>${project.basedir}/src/main/java/com/papaya/tipaltipoc/generated/payee</generateDirectory>
-                            <bindingIncludes>
+                            <generatePackage>com.papaya.tipaltipoc.generated.payee</generatePackage>
+                            <generateDirectory>${project.basedir}/src/main/java</generateDirectory>
+                            <args>
+                                <arg>-XautoNameResolution</arg>
+                            </args>
+                            <!--<bindingIncludes>
                                 <include>*.xjb</include>
                                 <include>*.xsd</include>
-                            </bindingIncludes>
+                            </bindingIncludes>-->
                             <schemas>
                                 <schema>
                                     <url>https://api.sandbox.tipalti.com/v9/PayeeFunctions.asmx?wsdl</url>
+                                 <!--   <fileset>
+                                        <excludes>
+                                            <exclude>*.xsd</exclude>
+                                            <exclude>*.xjc</exclude>
+                                        </excludes>
+                                    </fileset>-->
                                 </schema>
+
                             </schemas>
                         </configuration>
                     </execution>
