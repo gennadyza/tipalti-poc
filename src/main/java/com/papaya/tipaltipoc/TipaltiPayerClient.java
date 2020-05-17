@@ -31,8 +31,8 @@ public class TipaltiPayerClient extends WebServiceGatewaySupport {
         GetBalances request = new GetBalances();
         request.setPayerName("Papaya");
         //request.setKey("0kbVc9aDj9OfemxXYbKX1NVxa3qke2O4mzMgmVCIAivmrWRR/EwV2XMh2IpfzTjl");
-        request.setKey("uGSxuE3LpTbY76b2gfPLrs2BDEs5ba8qjrUhU5iP2PWIp1IoWPI8+41CuSq65sXx");
-        request.setTimestamp((double) LocalDateTime.now(ZoneOffset.UTC).toEpochSecond(ZoneOffset.UTC));
+        request.setKey(Hmacsha256.getEncryptionKey());
+        request.setTimestamp((double) LocalDateTime.now().toEpochSecond(ZoneOffset.UTC));
         GetBalancesResponse response = (GetBalancesResponse) getWebServiceTemplate().marshalSendAndReceive(request, new WebServiceMessageCallback() {
 
             public void doWithMessage(WebServiceMessage message) {
