@@ -15,7 +15,7 @@ import java.util.Base64;
 public class Hmacsha256 {
     @SneakyThrows
     public static String getEncryptionKey() {
-        String stringMessage = "Papaya" + LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
+        String stringMessage = "PapayaGlobal" + LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
         //stringMessage = stringMessage.substring(0, stringMessage.length()-3);
         byte[] secretKey = "uGSxuE3LpTbY76b2gfPLrs2BDEs5ba8qjrUhU5iP2PWIp1IoWPI8+41CuSq65sXx".getBytes(StandardCharsets.UTF_8);
         byte[] message = stringMessage.getBytes(StandardCharsets.UTF_8);
@@ -30,6 +30,7 @@ public class Hmacsha256 {
         return base64HmacSha256;
         //return hexencode(hmacSha256);
 
+        //return hmacSha256.toString();
     }
 
     public static String hexencode(byte[] bytes){
